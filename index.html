@@ -7,21 +7,21 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <title>Sổ Thu Chi & Phân Bổ Dòng Tiền Gia Đình</title>
   
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com">
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
 
   <script>
     tailwind.config = {
       theme: {
         extend: {
           fontFamily: {
-            sans: ['"Plus Jakarta Sans"', '"Be Vietnam Pro"', 'sans-serif'],
+            sans: ['"Plus Jakarta Sans"', '-apple-system', 'sans-serif'],
           }
         }
       }
@@ -29,7 +29,7 @@
   </script>
   <style>
     body {
-      font-family: 'Plus Jakarta Sans', 'Be Vietnam Pro', -apple-system, sans-serif;
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
       letter-spacing: -0.01em;
       -webkit-font-smoothing: antialiased;
     }
@@ -38,13 +38,16 @@
   </style>
 </head>
 <body class="bg-[#f8fafc] text-slate-800">
-  <div id="root"></div>
+  <div id="root">
+    <div style="display:flex; height:100vh; align-items:center; justify-content:center; font-family:sans-serif; color:#64748b; font-size:14px; font-weight:600;">
+      Đang tải ứng dụng...
+    </div>
+  </div>
 
   <script type="text/babel">
     const { useState, useEffect, useMemo } = React;
 
-    const STORAGE_KEY = 'GIA_DINH_TAI_CHINH_4PHEU_V2';
-    const OLD_KEYS = ['GIA_DINH_TAI_CHINH_4PHEU_V1', 'GIA_DINH_TAI_CHINH_PRO_V4', 'GIA_DINH_CHI_TIEU_BLANK_V2', 'GIA_DINH_CHI_TIEU_BLANK_V1', 'GIA_DINH_THU_CHI_SYNC_V1'];
+    const STORAGE_KEY = 'GIA_DINH_4PHEU_FULL_CONFIG_V1';
 
     const formatVND = (num, hidden = false) => {
       if (hidden) return '•••••• ₫';
@@ -52,7 +55,7 @@
     };
 
     const parseNum = (val) => {
-      if (typeof val === 'number') return val;
+      if (typeof val === 'number') return isNaN(val) ? 0 : val;
       const clean = String(val || '').replace(/[^0-9]/g, '');
       return parseInt(clean, 10) || 0;
     };
@@ -62,86 +65,68 @@
       return n === 0 ? '' : new Intl.NumberFormat('vi-VN').format(n);
     };
 
-    const DEFAULT_LIVING_BREAKDOWN = {
-      'Ăn uống & Đi chợ': 4500000,
-      'Em bé & Con cái': 2500000,
-      'Điện nước & Dịch vụ': 2000000,
-      'Chi tiêu cá nhân': 1000000,
-      'Dự phòng phát sinh': 1000000
-    };
-
-    const DEFAULT_DATA = {
-      // 1. Sổ tiết kiệm nền tảng (320 triệu - Khóa cứng bảo vệ)
+    // CẤU HÌNH MẶC ĐỊNH BAN ĐẦU (MỌI MỤC ĐỀU CÓ THỂ SỬA TRONG TAB CÀI ĐẶT)
+    const DEFAULT_CONFIG = {
       protectedSavings: 320000000,
-      // 2. Quỹ tiết kiệm riêng của bé (Dùng để trích đóng bảo hiểm & phí đầu năm)
-      babySavingsFund: 20000000, 
-      // 3. Dự kiến thu nhập hàng tháng
+      babySavingsFund: 20000000,
       incomeExpected: {
         mySalary: 12500000,
         husbandTransfer: 10000000,
         roomRent: 2500000
       },
-      // 4. Phễu 1: Ngân sách sinh hoạt chung
       livingBudget: 11000000,
-      livingBreakdown: DEFAULT_LIVING_BREAKDOWN,
-      // 5. Phễu 2: Học phí Edison Reggio hàng tháng
-      edisonMonthly: {
+      livingBreakdown: [
+        { id: 'b1', name: 'Ăn uống & Đi chợ', limit: 4500000 },
+        { id: 'b2', name: 'Em bé & Con cái', limit: 2500000 },
+        { id: 'b3', name: 'Điện nước & Dịch vụ', limit: 2000000 },
+        { id: 'b4', name: 'Chi tiêu cá nhân', limit: 1000000 },
+        { id: 'b5', name: 'Dự phòng phát sinh', limit: 1000000 }
+      ],
+      schoolConfig: {
+        schoolName: 'Mầm non Edison Reggio',
         tuition: 3150000,
-        mealFeeDays: 26,
-        mealFeePerDay: 50000,
-        materials: 100000,
-        ac: 100000,
-        oneTimeFees: 1520000, // CSVC & Sự kiện đầu năm (Rút từ tiết kiệm bé)
-        isMonthlyPaid: false,
-        isOneTimePaid: false
+        mealDays: 26,
+        mealRate: 50000,
+        learningMaterials: 100000,
+        acFee: 100000,
+        oneTimeFees: 1520000,
+        oneTimeTitle: 'CSVC & Sự kiện đầu năm',
+        oneTimeSource: 'baby_savings'
       },
-      // 6. Tiêm chủng
-      vaccineFund: {
-        spent: 0
-      },
-      // 7. Bảo hiểm nhân thọ (Đóng theo quý, kỳ đầu T11 - Rút từ tiết kiệm bé)
-      insurance: {
+      insuranceConfig: {
+        title: 'Bảo hiểm nhân thọ',
         quarterlyAmount: 0,
-        dueMonth: '2026-11',
-        isPaid: false
+        dueMonths: ['11', '02', '05', '08'],
+        source: 'baby_savings'
       },
       transactions: []
     };
 
     function App() {
       const [state, setState] = useState(() => {
-        const saved = localStorage.getItem(STORAGE_KEY);
-        if (saved) {
-          try {
-            return JSON.parse(saved);
-          } catch (e) {}
-        }
-        for (const k of OLD_KEYS) {
-          const raw = localStorage.getItem(k);
-          if (raw) {
-            try {
-              const old = JSON.parse(raw);
-              return {
-                ...DEFAULT_DATA,
-                transactions: old.transactions || []
-              };
-            } catch (e) {}
+        try {
+          const saved = localStorage.getItem(STORAGE_KEY);
+          if (saved) {
+            const parsed = JSON.parse(saved);
+            return { ...DEFAULT_CONFIG, ...parsed };
           }
+        } catch (e) {
+          console.error("Lỗi đọc dữ liệu:", e);
         }
-        return DEFAULT_DATA;
+        return DEFAULT_CONFIG;
       });
 
       const [selectedMonth, setSelectedMonth] = useState('2026-11');
-      const [activeTab, setActiveTab] = useState('overview');
+      const [activeTab, setActiveTab] = useState('overview'); // 'overview', 'transactions', 'settings'
       const [hideAmounts, setHideAmounts] = useState(false);
 
-      // Modal thêm giao dịch
+      // Modal Thêm Giao Dịch
       const [showModal, setShowModal] = useState(false);
       const [txTitle, setTxTitle] = useState('');
       const [txAmount, setTxAmount] = useState('');
-      const [txType, setTxType] = useState('expense');
-      const [txSource, setTxSource] = useState('monthly_income'); // 'monthly_income' hoặc 'baby_savings'
-      const [txBucket, setTxBucket] = useState('living11m');
+      const [txType, setTxType] = useState('expense'); // 'expense', 'income'
+      const [txSource, setTxSource] = useState('monthly_income'); // 'monthly_income', 'baby_savings'
+      const [txBucket, setTxBucket] = useState('living11m'); // 'living11m', 'school_regular', 'school_onetime', 'insurance', 'other'
       const [txCat, setTxCat] = useState('Ăn uống & Đi chợ');
       const [txMethod, setTxMethod] = useState('Chuyển khoản');
       const [txDate, setTxDate] = useState(() => {
@@ -149,159 +134,159 @@
         return `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
       });
 
-      // Bộ lọc
+      // Lọc danh sách
       const [filterSearch, setFilterSearch] = useState('');
       const [filterSource, setFilterSource] = useState('ALL');
 
       useEffect(() => {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        } catch (e) {
+          console.error("Lỗi lưu:", e);
+        }
       }, [state]);
 
       // Giao dịch tháng hiện tại
       const currentMonthTxs = useMemo(() => {
-        return state.transactions.filter(t => t.monthKey === selectedMonth);
+        if (!Array.isArray(state.transactions)) return [];
+        return state.transactions.filter(t => t && t.monthKey === selectedMonth);
       }, [state.transactions, selectedMonth]);
 
-      // 1. Tổng thu nhập thực nhận
-      const totalIncome = useMemo(() => {
-        return currentMonthTxs
-          .filter(t => t.type === 'income')
-          .reduce((sum, t) => sum + t.amount, 0);
-      }, [currentMonthTxs]);
-
-      // 2. Phễu 1: Chi gói sinh hoạt 11 triệu (chỉ trừ từ thu nhập tháng)
+      // 1. Phễu 1: Gói 11M
       const livingTxs = useMemo(() => {
         return currentMonthTxs.filter(t => t.type === 'expense' && (t.bucket === 'living11m' || !t.bucket));
       }, [currentMonthTxs]);
 
       const livingSpent = useMemo(() => {
-        return livingTxs.reduce((sum, t) => sum + t.amount, 0);
+        return livingTxs.reduce((sum, t) => sum + (t.amount || 0), 0);
       }, [livingTxs]);
 
-      const livingRemaining = Math.max(0, state.livingBudget - livingSpent);
+      const livingRemaining = Math.max(0, (state.livingBudget || 11000000) - livingSpent);
 
-      // Phân rã 5 nhóm con
       const breakdownStats = useMemo(() => {
-        return Object.entries(state.livingBreakdown).map(([name, limit]) => {
+        const list = Array.isArray(state.livingBreakdown) ? state.livingBreakdown : DEFAULT_CONFIG.livingBreakdown;
+        return list.map(item => {
           const spent = livingTxs
-            .filter(t => t.cat === name || (name.includes('Ăn uống') && t.cat?.includes('Ăn uống')) || (name.includes('Em bé') && t.cat?.includes('Em bé')) || (name.includes('Điện nước') && t.cat?.includes('Điện nước')) || (name.includes('cá nhân') && t.cat?.includes('cá nhân')) || (name.includes('Dự phòng') && t.cat?.includes('Dự phòng')))
-            .reduce((sum, t) => sum + t.amount, 0);
+            .filter(t => t.cat === item.name || (t.cat && t.cat.includes(item.name.split(' ')[0])))
+            .reduce((sum, t) => sum + (t.amount || 0), 0);
           return {
-            name,
-            limit,
+            ...item,
             spent,
-            percent: limit > 0 ? Math.min(100, Math.round((spent / limit) * 100)) : 0
+            percent: item.limit > 0 ? Math.min(100, Math.round((spent / item.limit) * 100)) : 0
           };
         });
       }, [state.livingBreakdown, livingTxs]);
 
-      // 3. Phễu 2: Học phí thường tháng Edison Reggio (4.650.000 ₫)
-      const edisonMonthlyStandard = useMemo(() => {
-        return (state.edisonMonthly.tuition || 3150000) + 
-               ((state.edisonMonthly.mealFeeDays || 26) * (state.edisonMonthly.mealFeePerDay || 50000)) + 
-               (state.edisonMonthly.materials || 100000) + 
-               (state.edisonMonthly.ac || 100000);
-      }, [state.edisonMonthly]);
+      // 2. Phễu 2: Trường học (Tính toán động theo cấu hình người dùng đặt)
+      const schoolRegularStandard = useMemo(() => {
+        const sc = state.schoolConfig || {};
+        return (sc.tuition || 0) + ((sc.mealDays || 0) * (sc.mealRate || 0)) + (sc.learningMaterials || 0) + (sc.acFee || 0);
+      }, [state.schoolConfig]);
 
-      // 4. Các khoản rút từ quỹ tiết kiệm cho bé (Bảo hiểm + CSVC/Sự kiện 1.520.000 ₫)
-      const babySavingsUsedThisMonth = useMemo(() => {
+      const schoolOneTimeAmount = useMemo(() => {
+        return state.schoolConfig?.oneTimeFees || 0;
+      }, [state.schoolConfig]);
+
+      // 3. Phễu 3: Khoản rút từ tiết kiệm cho bé
+      const babySavingsSpentThisMonth = useMemo(() => {
         return currentMonthTxs
-          .filter(t => t.type === 'expense' && (t.source === 'baby_savings' || t.bucket === 'insurance' || t.bucket === 'edison_onetime'))
-          .reduce((sum, t) => sum + t.amount, 0);
+          .filter(t => t.type === 'expense' && t.source === 'baby_savings')
+          .reduce((sum, t) => sum + (t.amount || 0), 0);
       }, [currentMonthTxs]);
 
-      // 5. Chi từ thu nhập tháng
+      // 4. Chi từ thu nhập tháng
       const monthlyIncomeExpenses = useMemo(() => {
         return currentMonthTxs
-          .filter(t => t.type === 'expense' && t.source !== 'baby_savings' && t.bucket !== 'insurance' && t.bucket !== 'edison_onetime')
-          .reduce((sum, t) => sum + t.amount, 0);
+          .filter(t => t.type === 'expense' && t.source !== 'baby_savings')
+          .reduce((sum, t) => sum + (t.amount || 0), 0);
       }, [currentMonthTxs]);
 
-      // 6. Tiết kiệm mới tích lũy kỳ này từ thu nhập tháng
-      const estimatedNewSavings = useMemo(() => {
-        const expectedTotal = totalIncome > 0 ? totalIncome : (state.incomeExpected.mySalary + state.incomeExpected.husbandTransfer + state.incomeExpected.roomRent);
-        const plannedExpensesFromMonthly = state.livingBudget + edisonMonthlyStandard;
-        return Math.max(0, expectedTotal - (monthlyIncomeExpenses > 0 ? monthlyIncomeExpenses : plannedExpensesFromMonthly));
-      }, [totalIncome, state.incomeExpected, state.livingBudget, edisonMonthlyStandard, monthlyIncomeExpenses]);
+      // Thu nhập thực tế
+      const totalIncome = useMemo(() => {
+        return currentMonthTxs
+          .filter(t => t.type === 'income')
+          .reduce((sum, t) => sum + (t.amount || 0), 0);
+      }, [currentMonthTxs]);
 
-      // Thẻ tín dụng đã quẹt
+      // Tiết kiệm tích lũy mới
+      const estimatedNewSavings = useMemo(() => {
+        const inc = totalIncome > 0 ? totalIncome : ((state.incomeExpected?.mySalary || 0) + (state.incomeExpected?.husbandTransfer || 0) + (state.incomeExpected?.roomRent || 0));
+        const plannedOut = (state.livingBudget || 11000000) + schoolRegularStandard;
+        return Math.max(0, inc - (monthlyIncomeExpenses > 0 ? monthlyIncomeExpenses : plannedOut));
+      }, [totalIncome, state.incomeExpected, state.livingBudget, schoolRegularStandard, monthlyIncomeExpenses]);
+
+      // Thẻ tín dụng
       const creditSpent = useMemo(() => {
         return currentMonthTxs
           .filter(t => t.method === 'Thẻ tín dụng' && t.type === 'expense')
-          .reduce((sum, t) => sum + t.amount, 0);
+          .reduce((sum, t) => sum + (t.amount || 0), 0);
       }, [currentMonthTxs]);
 
-      // Thao tác nhanh: Ghi đóng học phí thường tháng Edison (4.650.000 ₫ - Từ Thu Nhập Tháng)
-      const handleQuickPayMonthlyEdison = () => {
-        if (confirm(`Ghi nhận đóng học phí thường tháng Edison Reggio: ${formatVND(edisonMonthlyStandard)} (tính từ thu nhập tháng)?`)) {
+      // Thao tác nhanh
+      const handleQuickPaySchoolRegular = () => {
+        if (confirm(`Ghi nhận đóng tiền học thường tháng (${formatVND(schoolRegularStandard)}) từ Thu Nhập Tháng?`)) {
           const newTx = {
             id: Date.now(),
-            title: `Tiền học thường tháng Edison Reggio (${selectedMonth})`,
-            amount: edisonMonthlyStandard,
+            title: `Tiền học thường tháng ${state.schoolConfig?.schoolName || ''} (${selectedMonth})`,
+            amount: schoolRegularStandard,
             type: 'expense',
             source: 'monthly_income',
-            bucket: 'edison_monthly',
+            bucket: 'school_regular',
             cat: 'Em bé & Con cái',
             method: 'Chuyển khoản',
             monthKey: selectedMonth,
             createdAt: txDate
           };
-          setState(prev => ({ ...prev, transactions: [newTx, ...prev.transactions] }));
+          setState(prev => ({ ...prev, transactions: [newTx, ...(prev.transactions || [])] }));
         }
       };
 
-      // Thao tác nhanh: Rút từ tiết kiệm bé đóng CSVC & Sự kiện (1.520.000 ₫)
-      const handleQuickPayOneTimeEdison = () => {
-        const amt = state.edisonMonthly.oneTimeFees || 1520000;
-        if (confirm(`Ghi nhận rút từ Quỹ Tiết Kiệm Của Bé để đóng CSVC & Sự kiện đầu năm Edison Reggio: ${formatVND(amt)}?`)) {
+      const handleQuickPaySchoolOneTime = () => {
+        const amt = schoolOneTimeAmount;
+        const sourceLabel = state.schoolConfig?.oneTimeSource === 'baby_savings' ? 'Quỹ Tiết Kiệm Của Bé' : 'Thu Nhập Tháng';
+        if (confirm(`Ghi nhận đóng "${state.schoolConfig?.oneTimeTitle}" (${formatVND(amt)}) trích từ [${sourceLabel}]?`)) {
           const newTx = {
             id: Date.now(),
-            title: `Phí CSVC & Sự kiện đầu năm Edison Reggio (Rút tiết kiệm bé)`,
+            title: `${state.schoolConfig?.oneTimeTitle} (${state.schoolConfig?.schoolName})`,
             amount: amt,
             type: 'expense',
-            source: 'baby_savings',
-            bucket: 'edison_onetime',
+            source: state.schoolConfig?.oneTimeSource || 'baby_savings',
+            bucket: 'school_onetime',
             cat: 'Em bé & Con cái',
             method: 'Chuyển khoản',
             monthKey: selectedMonth,
             createdAt: txDate
           };
-          setState(prev => ({ ...prev, transactions: [newTx, ...prev.transactions] }));
+          setState(prev => ({ ...prev, transactions: [newTx, ...(prev.transactions || [])] }));
         }
       };
 
-      // Thao tác nhanh: Rút từ tiết kiệm bé đóng Bảo hiểm nhân thọ
       const handleQuickPayInsurance = () => {
-        if (!state.insurance.quarterlyAmount) {
-          const inputAmt = prompt('Nhập số tiền bảo hiểm nhân thọ quý này cần đóng (VNĐ):', '6000000');
+        let amt = state.insuranceConfig?.quarterlyAmount || 0;
+        if (!amt) {
+          const inputAmt = prompt('Nhập số tiền bảo hiểm nhân thọ kỳ này (VNĐ):', '6000000');
           if (!inputAmt) return;
-          const parsed = parseNum(inputAmt);
-          setState(prev => ({ ...prev, insurance: { ...prev.insurance, quarterlyAmount: parsed } }));
-          recordInsuranceTx(parsed);
-        } else {
-          recordInsuranceTx(state.insurance.quarterlyAmount);
+          amt = parseNum(inputAmt);
+          setState(prev => ({ ...prev, insuranceConfig: { ...prev.insuranceConfig, quarterlyAmount: amt } }));
         }
-      };
-
-      const recordInsuranceTx = (amt) => {
-        if (confirm(`Xác nhận rút từ Quỹ Tiết Kiệm Của Bé để đóng Bảo hiểm nhân thọ quý: ${formatVND(amt)}?`)) {
+        const sourceLabel = state.insuranceConfig?.source === 'baby_savings' ? 'Quỹ Tiết Kiệm Của Bé' : 'Thu Nhập Tháng';
+        if (confirm(`Xác nhận đóng Bảo hiểm nhân thọ (${formatVND(amt)}) trích từ [${sourceLabel}]?`)) {
           const newTx = {
             id: Date.now(),
-            title: `Đóng phí bảo hiểm nhân thọ (Rút tiết kiệm bé)`,
+            title: `Đóng phí ${state.insuranceConfig?.title || 'Bảo hiểm nhân thọ'} (Kỳ ${selectedMonth})`,
             amount: amt,
             type: 'expense',
-            source: 'baby_savings',
+            source: state.insuranceConfig?.source || 'baby_savings',
             bucket: 'insurance',
             cat: 'Bảo hiểm nhân thọ',
             method: 'Chuyển khoản',
             monthKey: selectedMonth,
             createdAt: txDate
           };
-          setState(prev => ({ ...prev, transactions: [newTx, ...prev.transactions] }));
+          setState(prev => ({ ...prev, transactions: [newTx, ...(prev.transactions || [])] }));
         }
       };
 
-      // Thêm giao dịch tự do
       const handleAddTx = (e) => {
         e.preventDefault();
         const amt = parseNum(txAmount);
@@ -320,11 +305,7 @@
           createdAt: txDate
         };
 
-        setState(prev => ({
-          ...prev,
-          transactions: [newTx, ...prev.transactions]
-        }));
-
+        setState(prev => ({ ...prev, transactions: [newTx, ...(prev.transactions || [])] }));
         setTxTitle('');
         setTxAmount('');
         setShowModal(false);
@@ -332,20 +313,14 @@
 
       const handleDelete = (id) => {
         if (confirm('Xóa khoản này khỏi sổ?')) {
-          setState(prev => ({
-            ...prev,
-            transactions: prev.transactions.filter(t => t.id !== id)
-          }));
+          setState(prev => ({ ...prev, transactions: prev.transactions.filter(t => t.id !== id) }));
         }
       };
 
-      // Danh sách sau lọc
       const filteredList = useMemo(() => {
         return currentMonthTxs.filter(t => {
-          const matchText = !filterSearch || t.title.toLowerCase().includes(filterSearch.toLowerCase());
-          const matchSource = filterSource === 'ALL' 
-            ? true 
-            : filterSource === 'baby_savings' ? (t.source === 'baby_savings' || t.bucket === 'insurance' || t.bucket === 'edison_onetime') : (t.source !== 'baby_savings' && t.bucket !== 'insurance' && t.bucket !== 'edison_onetime');
+          const matchText = !filterSearch || (t.title && t.title.toLowerCase().includes(filterSearch.toLowerCase()));
+          const matchSource = filterSource === 'ALL' ? true : t.source === filterSource;
           return matchText && matchSource;
         });
       }, [currentMonthTxs, filterSearch, filterSource]);
@@ -355,14 +330,14 @@
       return (
         <div className="flex flex-col min-h-screen bg-[#f8fafc] text-slate-800 pb-20 md:pb-6">
           
-          {/* TOP BAR */}
+          {/* HEADER */}
           <header className="bg-white border-b border-slate-200/80 sticky top-0 z-30 px-4 sm:px-8 py-3.5 flex items-center justify-between shadow-xs">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-2xl bg-emerald-600 text-white flex items-center justify-center font-black text-lg shadow-sm shadow-emerald-500/20">
                 💎
               </div>
               <div>
-                <h1 className="font-extrabold text-slate-900 text-sm sm:text-base leading-tight">Phân Bổ Dòng Tiền & Quỹ Cho Bé</h1>
+                <h1 className="font-extrabold text-slate-900 text-sm sm:text-base leading-tight">Phân Bổ Dòng Tiền Gia Đình</h1>
                 <div className="flex items-center gap-1.5 mt-0.5">
                   <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200/50">
                     {monthLabel}
@@ -390,7 +365,6 @@
             </div>
           </header>
 
-          {/* MAIN CONTAINER */}
           <main className="flex-1 max-w-4xl w-full mx-auto p-4 sm:p-6 space-y-5">
             
             {/* THANH ĐIỀU HƯỚNG TẦNG TRÊN (MÁY TÍNH) */}
@@ -399,7 +373,7 @@
                 onClick={() => setActiveTab('overview')}
                 className={`flex-1 py-2 rounded-xl transition-all ${activeTab === 'overview' ? 'bg-emerald-600 text-white shadow-xs' : 'text-slate-500 hover:text-slate-800'}`}
               >
-                📊 Dòng Tiền & 2 Nguồn Chi
+                📊 Dòng Tiền & Nguồn Chi
               </button>
               <button 
                 onClick={() => setActiveTab('transactions')}
@@ -411,7 +385,7 @@
                 onClick={() => setActiveTab('settings')}
                 className={`flex-1 py-2 rounded-xl transition-all ${activeTab === 'settings' ? 'bg-emerald-600 text-white shadow-xs' : 'text-slate-500 hover:text-slate-800'}`}
               >
-                ⚙️ Định Mức & Quỹ Cho Bé
+                ⚙️ Tùy Chỉnh Định Mức
               </button>
             </div>
 
@@ -419,7 +393,7 @@
             {activeTab === 'overview' && (
               <div className="space-y-4">
                 
-                {/* KHỐI 1: SỔ TIẾT KIỆM NỀN TẢNG BẢO VỆ 320 TRIỆU */}
+                {/* KHỐI TIẾT KIỆM NỀN 320M */}
                 <div className="bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 rounded-3xl p-5 text-white shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
@@ -432,7 +406,7 @@
                       {formatVND(state.protectedSavings, hideAmounts)}
                     </div>
                     <p className="text-[11px] text-emerald-100">
-                      Tuyệt đối không đụng vào kể cả đóng bảo hiểm hay học phí đầu năm.
+                      Được khóa bảo vệ, bạn có thể chỉnh con số này trong tab Cài đặt bất kỳ lúc nào.
                     </p>
                   </div>
 
@@ -442,7 +416,7 @@
                   </div>
                 </div>
 
-                {/* KHỐI 2: NGUỒN TIẾT KIỆM CỦA BÉ ĐỂ TRÍCH ĐÓNG PHÁT SINH */}
+                {/* KHỐI NGUỒN TIẾT KIỆM CỦA BÉ */}
                 <div className="bg-gradient-to-br from-indigo-50 to-purple-50/70 rounded-3xl p-5 border border-purple-200/80 shadow-xs space-y-3">
                   <div className="flex items-center justify-between">
                     <div>
@@ -450,72 +424,72 @@
                         👶 Nguồn: Quỹ Tiết Kiệm Dành Riêng Cho Bé
                       </span>
                       <h3 className="text-lg font-black text-slate-900 mt-1">
-                        Dành riêng đóng: Bảo Hiểm & CSVC Đầu Năm
+                        Dành Riêng Chi Các Khoản Lớn / Phát Sinh
                       </h3>
                     </div>
                     <div className="text-right">
                       <span className="text-xs text-slate-400 font-bold block">Đã trích tháng này</span>
-                      <span className="text-base font-black text-purple-700">-{formatVND(babySavingsUsedThisMonth, hideAmounts)}</span>
+                      <span className="text-base font-black text-purple-700">-{formatVND(babySavingsSpentThisMonth, hideAmounts)}</span>
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-                    {/* Mục 1: CSVC & Sự kiện đầu năm Edison Reggio (1.520.000 ₫) */}
+                    {/* Khoản phát sinh trường học */}
                     <div className="p-3.5 rounded-2xl bg-white border border-purple-100 shadow-2xs space-y-2">
                       <div className="flex justify-between items-center text-xs">
-                        <span className="font-bold text-slate-800">1. CSVC & Sự kiện Edison</span>
-                        <span className="font-black text-slate-900">1.520.000 ₫</span>
+                        <span className="font-bold text-slate-800">1. {state.schoolConfig?.oneTimeTitle || 'Phí đầu năm'}</span>
+                        <span className="font-black text-slate-900">{formatVND(schoolOneTimeAmount, hideAmounts)}</span>
                       </div>
-                      <p className="text-[10px] text-slate-400">Khoản phát sinh đầu năm học, trích từ tiết kiệm bé.</p>
+                      <p className="text-[10px] text-slate-400">Nguồn trích: {state.schoolConfig?.oneTimeSource === 'baby_savings' ? 'Quỹ Tiết Kiệm Bé' : 'Thu nhập tháng'}</p>
                       
-                      {currentMonthTxs.some(t => t.bucket === 'edison_onetime') ? (
-                        <span className="block text-center text-xs font-bold text-emerald-700 bg-emerald-50 py-1 rounded-xl">
-                          ✓ Đã trích đóng từ quỹ bé
+                      {currentMonthTxs.some(t => t.bucket === 'school_onetime') ? (
+                        <span className="block text-center text-xs font-bold text-emerald-700 bg-emerald-50 py-1.5 rounded-xl">
+                          ✓ Đã thanh toán
                         </span>
                       ) : (
                         <button 
-                          onClick={handleQuickPayOneTimeEdison}
+                          onClick={handleQuickPaySchoolOneTime}
                           className="w-full py-1.5 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs rounded-xl shadow-xs"
                         >
-                          Trích Quỹ Bé Đóng (1.52M)
+                          Xác Nhận Đóng ({formatVND(schoolOneTimeAmount)})
                         </button>
                       )}
                     </div>
 
-                    {/* Mục 2: Bảo hiểm nhân thọ (Đóng theo quý 3 tháng/lần) */}
+                    {/* Bảo hiểm nhân thọ */}
                     <div className="p-3.5 rounded-2xl bg-white border border-purple-100 shadow-2xs space-y-2">
                       <div className="flex justify-between items-center text-xs">
-                        <span className="font-bold text-slate-800">2. Bảo hiểm nhân thọ (Kỳ T11)</span>
+                        <span className="font-bold text-slate-800">2. {state.insuranceConfig?.title || 'Bảo hiểm nhân thọ'}</span>
                         <span className="font-black text-purple-900">
-                          {state.insurance.quarterlyAmount > 0 ? formatVND(state.insurance.quarterlyAmount, hideAmounts) : 'Chưa nhập'}
+                          {state.insuranceConfig?.quarterlyAmount > 0 ? formatVND(state.insuranceConfig.quarterlyAmount, hideAmounts) : 'Tùy nhập'}
                         </span>
                       </div>
-                      <p className="text-[10px] text-slate-400">Đóng 3 tháng/lần, trích từ tiết kiệm bé.</p>
+                      <p className="text-[10px] text-slate-400">Nguồn trích: {state.insuranceConfig?.source === 'baby_savings' ? 'Quỹ Tiết Kiệm Bé' : 'Thu nhập tháng'}</p>
                       
                       {currentMonthTxs.some(t => t.bucket === 'insurance') ? (
-                        <span className="block text-center text-xs font-bold text-emerald-700 bg-emerald-50 py-1 rounded-xl">
-                          ✓ Đã trích đóng bảo hiểm
+                        <span className="block text-center text-xs font-bold text-emerald-700 bg-emerald-50 py-1.5 rounded-xl">
+                          ✓ Đã đóng bảo hiểm
                         </span>
                       ) : (
                         <button 
                           onClick={handleQuickPayInsurance}
                           className="w-full py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow-xs"
                         >
-                          Trích Quỹ Bé Đóng Bảo Hiểm
+                          Xác Nhận Đóng Bảo Hiểm
                         </button>
                       )}
                     </div>
                   </div>
                 </div>
 
-                {/* KHỐI 3: DÒNG TIỀN TỪ THU NHẬP HÀNG THÁNG (~25 TRIỆU) */}
+                {/* KHỐI THU NHẬP HÀNG THÁNG */}
                 <div className="space-y-4">
-                  {/* Phễu 1: Quỹ chi tiêu chung 11M */}
+                  {/* Phễu 1: 11 Triệu sinh hoạt */}
                   <div className="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/80 shadow-xs space-y-4">
                     <div className="flex items-center justify-between">
                       <div>
                         <span className="text-[11px] font-extrabold uppercase tracking-wider text-amber-800 bg-amber-100 px-2.5 py-0.5 rounded-full">
-                          Nguồn Thu Nhập Tháng: Quỹ Chi Tiêu Chung (11M)
+                          Quỹ Chi Tiêu Chung ({formatVND(state.livingBudget || 11000000)})
                         </span>
                         <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mt-1.5">
                           Còn lại: <span className="text-emerald-600">{formatVND(livingRemaining, hideAmounts)}</span>
@@ -527,24 +501,23 @@
                       </div>
                     </div>
 
-                    {/* Thanh tiến độ chính 11M */}
                     <div className="space-y-1.5">
                       <div className="w-full bg-slate-100 h-3.5 rounded-full overflow-hidden p-0.5">
                         <div 
-                          className={`h-full rounded-full transition-all duration-500 ${livingSpent > state.livingBudget ? 'bg-rose-500' : 'bg-emerald-500'}`}
-                          style={{ width: `${Math.min(100, Math.round((livingSpent / state.livingBudget) * 100))}%` }}
+                          className={`h-full rounded-full transition-all duration-500 ${livingSpent > (state.livingBudget || 11000000) ? 'bg-rose-500' : 'bg-emerald-500'}`}
+                          style={{ width: `${Math.min(100, Math.round((livingSpent / (state.livingBudget || 11000000)) * 100))}%` }}
                         />
                       </div>
                       <div className="flex justify-between items-center text-[11px] font-bold text-slate-500">
-                        <span>Đã tiêu: {Math.round((livingSpent / state.livingBudget) * 100)}%</span>
-                        <span>Định mức: {formatVND(state.livingBudget, hideAmounts)}</span>
+                        <span>Đã tiêu: {Math.round((livingSpent / (state.livingBudget || 11000000)) * 100)}%</span>
+                        <span>Định mức: {formatVND(state.livingBudget || 11000000, hideAmounts)}</span>
                       </div>
                     </div>
 
-                    {/* Phân rã 5 nhóm con */}
+                    {/* Phân rã nhóm con */}
                     <div className="pt-2 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                       {breakdownStats.map(item => (
-                        <div key={item.name} className="p-2.5 rounded-xl bg-slate-50/80 border border-slate-100 space-y-1">
+                        <div key={item.id || item.name} className="p-2.5 rounded-xl bg-slate-50/80 border border-slate-100 space-y-1">
                           <div className="flex justify-between items-center text-xs font-bold">
                             <span className="text-slate-800">{item.name}</span>
                             <span className={item.spent > item.limit ? 'text-rose-600 font-extrabold' : 'text-slate-700'}>
@@ -562,36 +535,38 @@
                     </div>
                   </div>
 
-                  {/* Phễu 2: Học phí thường tháng Edison Reggio (4.650.000 ₫ - Từ Thu Nhập Tháng) */}
+                  {/* Phễu 2: Học phí thường tháng */}
                   <div className="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs space-y-3">
                     <div className="flex items-center justify-between">
                       <div>
                         <span className="text-[11px] font-extrabold uppercase tracking-wider text-blue-800 bg-blue-100 px-2.5 py-0.5 rounded-full">
-                          Nguồn Thu Nhập Tháng: Tiền Học Thường Tháng Của Bé
+                          Tiền Học Thường Tháng Của Bé
                         </span>
                         <h3 className="text-base font-black text-slate-900 mt-1">
-                          Mầm Non Edison Reggio (Thường Tháng)
+                          {state.schoolConfig?.schoolName || 'Mầm non'}
                         </h3>
                       </div>
-                      <span className="text-lg font-black text-blue-700">{formatVND(edisonMonthlyStandard, hideAmounts)}</span>
+                      <span className="text-lg font-black text-blue-700">{formatVND(schoolRegularStandard, hideAmounts)}</span>
                     </div>
 
-                    <div className="p-3 bg-blue-50/50 rounded-2xl border border-blue-100 flex items-center justify-between text-xs">
+                    <div className="p-3 bg-blue-50/50 rounded-2xl border border-blue-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
                       <div className="space-y-0.5">
-                        <span className="text-slate-600 font-semibold block">Gồm: Học phí 3.15M + Ăn 26 ngày (1.3M) + Học liệu & Điều hòa (200k)</span>
-                        <span className="text-[10px] text-slate-400">Trích trực tiếp từ thu nhập lương/chồng chuyển hằng tháng.</span>
+                        <span className="text-slate-600 font-semibold block">
+                          Học phí ({formatVND(state.schoolConfig?.tuition)}) + Ăn ({state.schoolConfig?.mealDays} ngày x {formatVND(state.schoolConfig?.mealRate)}) + Phí khác ({formatVND((state.schoolConfig?.learningMaterials||0) + (state.schoolConfig?.acFee||0))})
+                        </span>
+                        <span className="text-[10px] text-slate-400">Trích từ Thu Nhập Tháng. Bạn có thể sửa từng mức phí này trong tab Cài đặt.</span>
                       </div>
 
-                      {currentMonthTxs.some(t => t.bucket === 'edison_monthly') ? (
-                        <span className="text-xs bg-emerald-100 text-emerald-800 font-bold px-3 py-1 rounded-xl">
-                          ✓ Đã đóng tiền tháng
+                      {currentMonthTxs.some(t => t.bucket === 'school_regular') ? (
+                        <span className="text-xs bg-emerald-100 text-emerald-800 font-bold px-3 py-1.5 rounded-xl text-center">
+                          ✓ Đã đóng tháng này
                         </span>
                       ) : (
                         <button 
-                          onClick={handleQuickPayMonthlyEdison}
-                          className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-xs"
+                          onClick={handleQuickPaySchoolRegular}
+                          className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-xs text-center"
                         >
-                          Ghi Nhận Đã Đóng
+                          Xác Nhận Đóng
                         </button>
                       )}
                     </div>
@@ -613,7 +588,7 @@
               </div>
             )}
 
-            {/* TAB 2: LỊCH SỬ GIAO DỊCH */}
+            {/* TAB 2: GIAO DỊCH */}
             {activeTab === 'transactions' && (
               <div className="bg-white rounded-3xl border border-slate-200/80 shadow-xs overflow-hidden space-y-3">
                 <div className="p-4 border-b border-slate-100 space-y-3">
@@ -632,8 +607,8 @@
                       className="px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-bold text-slate-700"
                     >
                       <option value="ALL">Tất cả nguồn chi</option>
-                      <option value="monthly_income">Chi từ thu nhập tháng (11M & Học phí)</option>
-                      <option value="baby_savings">Rút từ tiết kiệm bé (Bảo hiểm & CSVC)</option>
+                      <option value="monthly_income">Thu nhập tháng (11M & Học phí thường)</option>
+                      <option value="baby_savings">Rút từ tiết kiệm bé (Bảo hiểm & Phí đầu năm)</option>
                     </select>
                   </div>
                 </div>
@@ -676,47 +651,163 @@
               </div>
             )}
 
-            {/* TAB 3: SETTINGS */}
+            {/* TAB 3: CÀI ĐẶT TÙY Ý MỌI THỨ */}
             {activeTab === 'settings' && (
-              <div className="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/80 shadow-xs space-y-5">
+              <div className="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/80 shadow-xs space-y-6">
                 <div>
-                  <h3 className="font-bold text-slate-900 text-base">Cấu Hình Định Mức Các Nguồn Tiền</h3>
-                  <p className="text-xs text-slate-500">Tùy chỉnh số tiền các quỹ và hạn mức sinh hoạt.</p>
+                  <h3 className="font-bold text-slate-900 text-base">Tùy Ý Cấu Hình Định Mức Tài Chính</h3>
+                  <p className="text-xs text-slate-500">Mọi thông số dưới đây bạn đều có thể thay đổi theo ý muốn.</p>
                 </div>
 
-                <div className="space-y-3">
-                  <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-100 space-y-1.5">
-                    <span className="text-xs font-bold text-slate-800 block">1. Tiết kiệm nền tảng bảo vệ</span>
-                    <input 
-                      type="text"
-                      value={formatInputNumber(state.protectedSavings)}
-                      onChange={(e) => setState(prev => ({ ...prev, protectedSavings: parseNum(e.target.value) }))}
-                      className="w-full px-3 py-2 rounded-xl border border-slate-200 font-bold text-xs"
-                    />
-                  </div>
+                {/* 1. Tiết kiệm nền */}
+                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 space-y-2">
+                  <span className="text-xs font-bold text-slate-800 block">Sổ tiết kiệm nền tảng bảo vệ (VNĐ)</span>
+                  <input 
+                    type="text"
+                    value={formatInputNumber(state.protectedSavings)}
+                    onChange={(e) => setState(prev => ({ ...prev, protectedSavings: parseNum(e.target.value) }))}
+                    className="w-full px-3 py-2 rounded-xl border border-slate-200 font-bold text-xs bg-white"
+                  />
+                </div>
 
-                  <div className="p-3.5 rounded-2xl bg-purple-50/50 border border-purple-100 space-y-1.5">
-                    <span className="text-xs font-bold text-purple-900 block">2. Quỹ tiết kiệm dành riêng cho bé (Để trích đóng bảo hiểm/CSVC)</span>
-                    <input 
-                      type="text"
-                      value={formatInputNumber(state.babySavingsFund)}
-                      onChange={(e) => setState(prev => ({ ...prev, babySavingsFund: parseNum(e.target.value) }))}
-                      className="w-full px-3 py-2 rounded-xl border border-purple-200 font-bold text-xs"
-                    />
-                  </div>
-
-                  <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-100 space-y-1.5">
-                    <span className="text-xs font-bold text-slate-800 block">3. Ngân sách sinh hoạt chung 11M</span>
+                {/* 2. Quỹ sinh hoạt 11M & Nhóm con */}
+                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 space-y-3">
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs font-bold text-slate-800">Tổng hạn mức Quỹ sinh hoạt chung (VNĐ)</span>
                     <input 
                       type="text"
                       value={formatInputNumber(state.livingBudget)}
                       onChange={(e) => setState(prev => ({ ...prev, livingBudget: parseNum(e.target.value) }))}
-                      className="w-full px-3 py-2 rounded-xl border border-slate-200 font-bold text-xs"
+                      className="w-40 px-3 py-1.5 rounded-xl border border-slate-200 font-bold text-xs bg-white text-right"
                     />
+                  </div>
+
+                  <span className="text-[11px] font-bold text-slate-400 uppercase block pt-1">Định mức 5 nhóm con:</span>
+                  <div className="space-y-2">
+                    {(state.livingBreakdown || []).map((item, idx) => (
+                      <div key={item.id || idx} className="flex items-center gap-2">
+                        <input 
+                          type="text"
+                          value={item.name}
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            setState(prev => ({
+                              ...prev,
+                              livingBreakdown: prev.livingBreakdown.map((b, i) => i === idx ? { ...b, name: val } : b)
+                            }));
+                          }}
+                          className="flex-1 px-3 py-1.5 rounded-lg border border-slate-200 text-xs font-semibold bg-white"
+                        />
+                        <input 
+                          type="text"
+                          value={formatInputNumber(item.limit)}
+                          onChange={(e) => {
+                            const val = parseNum(e.target.value);
+                            setState(prev => ({
+                              ...prev,
+                              livingBreakdown: prev.livingBreakdown.map((b, i) => i === idx ? { ...b, limit: val } : b)
+                            }));
+                          }}
+                          className="w-32 px-3 py-1.5 rounded-lg border border-slate-200 text-xs font-bold bg-white text-right"
+                        />
+                        <span className="text-xs text-slate-400">₫</span>
+                      </div>
+                    ))}
                   </div>
                 </div>
 
-                <div className="pt-3 border-t border-slate-100 flex gap-3">
+                {/* 3. Cấu hình tiền học mầm non */}
+                <div className="p-4 rounded-2xl bg-blue-50/50 border border-blue-100 space-y-3">
+                  <span className="text-xs font-bold text-blue-900 block">Cấu hình biểu phí mầm non</span>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                    <div>
+                      <label className="text-[10px] text-slate-500 font-bold block mb-1">Tên trường</label>
+                      <input 
+                        type="text" 
+                        value={state.schoolConfig?.schoolName || ''}
+                        onChange={(e) => setState(prev => ({ ...prev, schoolConfig: { ...prev.schoolConfig, schoolName: e.target.value } }))}
+                        className="w-full px-3 py-1.5 rounded-lg border border-slate-200 bg-white font-semibold"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-[10px] text-slate-500 font-bold block mb-1">Học phí tháng (VNĐ)</label>
+                      <input 
+                        type="text" 
+                        value={formatInputNumber(state.schoolConfig?.tuition)}
+                        onChange={(e) => setState(prev => ({ ...prev, schoolConfig: { ...prev.schoolConfig, tuition: parseNum(e.target.value) } }))}
+                        className="w-full px-3 py-1.5 rounded-lg border border-slate-200 bg-white font-bold"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-[10px] text-slate-500 font-bold block mb-1">Số ngày ăn trong tháng</label>
+                      <input 
+                        type="number" 
+                        value={state.schoolConfig?.mealDays || 0}
+                        onChange={(e) => setState(prev => ({ ...prev, schoolConfig: { ...prev.schoolConfig, mealDays: parseInt(e.target.value, 10) || 0 } }))}
+                        className="w-full px-3 py-1.5 rounded-lg border border-slate-200 bg-white font-bold"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-[10px] text-slate-500 font-bold block mb-1">Tiền ăn 1 ngày (VNĐ)</label>
+                      <input 
+                        type="text" 
+                        value={formatInputNumber(state.schoolConfig?.mealRate)}
+                        onChange={(e) => setState(prev => ({ ...prev, schoolConfig: { ...prev.schoolConfig, mealRate: parseNum(e.target.value) } }))}
+                        className="w-full px-3 py-1.5 rounded-lg border border-slate-200 bg-white font-bold"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-[10px] text-slate-500 font-bold block mb-1">Phí CSVC & Sự kiện đầu năm</label>
+                      <input 
+                        type="text" 
+                        value={formatInputNumber(state.schoolConfig?.oneTimeFees)}
+                        onChange={(e) => setState(prev => ({ ...prev, schoolConfig: { ...prev.schoolConfig, oneTimeFees: parseNum(e.target.value) } }))}
+                        className="w-full px-3 py-1.5 rounded-lg border border-slate-200 bg-white font-bold"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-[10px] text-slate-500 font-bold block mb-1">Nguồn trích phí đầu năm</label>
+                      <select 
+                        value={state.schoolConfig?.oneTimeSource || 'baby_savings'}
+                        onChange={(e) => setState(prev => ({ ...prev, schoolConfig: { ...prev.schoolConfig, oneTimeSource: e.target.value } }))}
+                        className="w-full px-3 py-1.5 rounded-lg border border-slate-200 bg-white font-bold"
+                      >
+                        <option value="baby_savings">Quỹ Tiết Kiệm Của Bé</option>
+                        <option value="monthly_income">Thu Nhập Hàng Tháng</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 4. Cấu hình bảo hiểm nhân thọ */}
+                <div className="p-4 rounded-2xl bg-purple-50/50 border border-purple-100 space-y-3">
+                  <span className="text-xs font-bold text-purple-900 block">Cấu hình Bảo hiểm nhân thọ</span>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                    <div>
+                      <label className="text-[10px] text-slate-500 font-bold block mb-1">Số tiền mỗi kỳ đóng (VNĐ)</label>
+                      <input 
+                        type="text" 
+                        value={formatInputNumber(state.insuranceConfig?.quarterlyAmount)}
+                        onChange={(e) => setState(prev => ({ ...prev, insuranceConfig: { ...prev.insuranceConfig, quarterlyAmount: parseNum(e.target.value) } }))}
+                        className="w-full px-3 py-1.5 rounded-lg border border-slate-200 bg-white font-bold"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-[10px] text-slate-500 font-bold block mb-1">Nguồn trích đóng bảo hiểm</label>
+                      <select 
+                        value={state.insuranceConfig?.source || 'baby_savings'}
+                        onChange={(e) => setState(prev => ({ ...prev, insuranceConfig: { ...prev.insuranceConfig, source: e.target.value } }))}
+                        className="w-full px-3 py-1.5 rounded-lg border border-slate-200 bg-white font-bold"
+                      >
+                        <option value="baby_savings">Quỹ Tiết Kiệm Của Bé</option>
+                        <option value="monthly_income">Thu Nhập Hàng Tháng</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Sao lưu */}
+                <div className="pt-2 border-t border-slate-100 flex gap-3">
                   <button 
                     onClick={() => {
                       const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
@@ -777,9 +868,17 @@
               <span className="text-lg">📝</span>
               <span className="text-[10px]">Lịch sử</span>
             </button>
+
+            <button 
+              onClick={() => setActiveTab('settings')}
+              className={`flex flex-col items-center gap-1 ${activeTab === 'settings' ? 'text-emerald-600 font-extrabold' : 'text-slate-400'}`}
+            >
+              <span className="text-lg">⚙️</span>
+              <span className="text-[10px]">Cài đặt</span>
+            </button>
           </nav>
 
-          {/* MODAL GHI GIAO DỊCH (CÓ CHỌN NGUỒN TIỀN) */}
+          {/* MODAL THÊM KHOẢN CHI */}
           {showModal && (
             <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 flex items-center justify-center p-4">
               <div className="bg-white rounded-3xl w-full max-w-sm p-5 shadow-2xl space-y-4">
@@ -813,7 +912,6 @@
                     />
                   </div>
 
-                  {/* CHỌN NGUỒN TIỀN TRÍCH RA */}
                   <div>
                     <label className="block text-[11px] font-bold text-indigo-900 uppercase mb-1">Nguồn Tiền Trích Ra</label>
                     <select 
