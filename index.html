@@ -4,37 +4,59 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Sổ Thu Chi & Phân Bổ Dòng Tiền Gia Đình</title>
+  
+  <!-- Bộ Font Chuẩn Bản Trước: Plus Jakarta Sans & Be Vietnam Pro -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  
+  <!-- Nạp Thư Viện Supabase Chính Thức -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body { background-color: #f8fafc; color: #1e293b; padding-bottom: 90px; }
+    * { 
+      box-sizing: border-box; 
+      margin: 0; 
+      padding: 0; 
+      font-family: 'Plus Jakarta Sans', 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+      letter-spacing: -0.015em;
+      -webkit-font-smoothing: antialiased;
+    }
+    body { background-color: #f8fafc; color: #1e293b; padding-bottom: 95px; }
     header { background: #fff; border-bottom: 1px solid #e2e8f0; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 20; }
     .logo-area { display: flex; align-items: center; gap: 10px; }
-    .logo-icon { width: 36px; height: 36px; border-radius: 10px; background: #059669; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+    .logo-icon { width: 38px; height: 38px; border-radius: 12px; background: #059669; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 18px; box-shadow: 0 4px 8px rgba(5,150,105,0.2); }
+    .status-badge { font-size: 10.5px; font-weight: 700; padding: 2px 8px; border-radius: 99px; }
+    .status-online { background: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; }
+    .status-offline { background: #fee2e2; color: #991b1b; }
     .container { max-width: 760px; margin: 0 auto; padding: 16px; display: flex; flex-direction: column; gap: 16px; }
-    .card { background: #fff; border-radius: 20px; border: 1px solid #e2e8f0; padding: 18px; box-shadow: 0 1px 3px rgba(0,0,0,0.02); }
-    .card-banner { background: linear-gradient(135deg, #059669, #0d9488); color: #fff; border: none; }
-    .badge { display: inline-block; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 99px; text-transform: uppercase; }
+    .card { background: #fff; border-radius: 24px; border: 1px solid #e2e8f0; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.02); }
+    .card-banner { background: linear-gradient(135deg, #059669, #0d9488); color: #fff; border: none; box-shadow: 0 8px 20px rgba(5,150,105,0.15); }
+    .badge { display: inline-block; font-size: 11px; font-weight: 800; padding: 3px 9px; border-radius: 99px; text-transform: uppercase; letter-spacing: 0.02em; }
     .badge-amber { background: #fef3c7; color: #92400e; }
     .badge-purple { background: #f3e8ff; color: #6b21a8; }
     .badge-blue { background: #dbeafe; color: #1e40af; }
     .badge-green { background: #d1fae5; color: #065f46; }
     .progress-bar { width: 100%; height: 10px; background: #e2e8f0; border-radius: 99px; overflow: hidden; margin: 10px 0; }
-    .progress-fill { height: 100%; border-radius: 99px; transition: width 0.3s; }
+    .progress-fill { height: 100%; border-radius: 99px; transition: width 0.4s ease; }
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .grid-item { background: #f8fafc; border: 1px solid #f1f5f9; border-radius: 12px; padding: 10px; font-size: 13px; }
-    .btn { padding: 8px 14px; border-radius: 10px; font-weight: 700; font-size: 13px; border: none; cursor: pointer; }
-    .btn-emerald { background: #059669; color: #fff; }
-    .btn-purple { background: #7c3aed; color: #fff; }
-    .btn-blue { background: #2563eb; color: #fff; }
+    .grid-item { background: #f8fafc; border: 1px solid #f1f5f9; border-radius: 16px; padding: 12px; font-size: 13px; }
+    .btn { padding: 9px 15px; border-radius: 12px; font-weight: 700; font-size: 13px; border: none; cursor: pointer; transition: all 0.15s ease; }
+    .btn:active { transform: scale(0.97); }
+    .btn-emerald { background: #059669; color: #fff; box-shadow: 0 2px 6px rgba(5,150,105,0.25); }
+    .btn-purple { background: #7c3aed; color: #fff; box-shadow: 0 2px 6px rgba(124,58,237,0.25); }
+    .btn-blue { background: #2563eb; color: #fff; box-shadow: 0 2px 6px rgba(37,99,235,0.25); }
     .btn-outline { background: #fff; border: 1px solid #cbd5e1; color: #475569; }
-    .tx-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #f1f5f9; }
-    .nav-bottom { position: fixed; bottom: 0; left: 0; right: 0; height: 65px; background: #fff; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-around; align-items: center; z-index: 30; }
-    .nav-btn { display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 11px; font-weight: 700; color: #64748b; border: none; background: none; cursor: pointer; }
+    .tx-item { display: flex; justify-content: space-between; align-items: center; padding: 13px 0; border-bottom: 1px solid #f1f5f9; }
+    .nav-bottom { position: fixed; bottom: 0; left: 0; right: 0; height: 68px; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-top: 1px solid #e2e8f0; display: flex; justify-content: space-around; align-items: center; z-index: 30; }
+    .nav-btn { display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 10.5px; font-weight: 700; color: #64748b; border: none; background: none; cursor: pointer; }
     .nav-btn.active { color: #059669; }
-    .fab-btn { width: 48px; height: 48px; border-radius: 50%; background: #059669; color: #fff; font-size: 24px; font-weight: 900; border: 3px solid #fff; box-shadow: 0 4px 10px rgba(5,150,105,0.4); margin-top: -24px; cursor: pointer; }
-    .modal-overlay { position: fixed; inset: 0; background: rgba(15,23,42,0.6); display: none; align-items: center; justify-content: center; z-index: 50; padding: 16px; }
-    .modal-box { background: #fff; width: 100%; max-width: 400px; border-radius: 20px; padding: 20px; display: flex; flex-direction: column; gap: 14px; }
-    input, select { width: 100%; padding: 10px; border-radius: 10px; border: 1px solid #cbd5e1; font-size: 14px; outline: none; }
+    .fab-btn { width: 50px; height: 50px; border-radius: 50%; background: #059669; color: #fff; font-size: 26px; font-weight: 900; border: 3px solid #fff; box-shadow: 0 6px 14px rgba(5,150,105,0.35); margin-top: -24px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .fab-btn:active { transform: scale(0.92); }
+    .modal-overlay { position: fixed; inset: 0; background: rgba(15,23,42,0.55); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; z-index: 50; padding: 16px; }
+    .modal-box { background: #fff; width: 100%; max-width: 400px; border-radius: 24px; padding: 22px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 20px 30px rgba(0,0,0,0.12); }
+    input, select { width: 100%; padding: 11px 13px; border-radius: 12px; border: 1px solid #cbd5e1; font-size: 13.5px; font-weight: 600; outline: none; background: #fff; }
+    input:focus, select:focus { border-color: #059669; box-shadow: 0 0 0 3px rgba(5,150,105,0.12); }
   </style>
 </head>
 <body>
@@ -44,11 +66,14 @@
       <div class="logo-icon">💎</div>
       <div>
         <div style="font-weight: 800; font-size: 15px;">Sổ Thu Chi Gia Đình</div>
-        <div style="font-size: 11px; color: #059669; font-weight: 700;" id="txtHeaderMonth">Tháng 11/2026</div>
+        <div style="display: flex; align-items: center; gap: 6px; margin-top: 2px;">
+          <span style="font-size: 11px; color: #059669; font-weight: 700;" id="txtHeaderMonth">Tháng 11/2026</span>
+          <span class="status-badge status-offline" id="badgeSync">Chưa kết nối Cloud</span>
+        </div>
       </div>
     </div>
-    <div style="display: flex; gap: 8px;">
-      <input type="month" id="inputMonth" style="width: auto; padding: 4px 8px; font-size: 12px; font-weight: 700;" value="2026-11" onchange="changeMonth(this.value)" />
+    <div>
+      <input type="month" id="inputMonth" style="width: auto; padding: 5px 9px; font-size: 12px; font-weight: 700;" value="2026-11" onchange="changeMonth(this.value)" />
     </div>
   </header>
 
@@ -57,39 +82,39 @@
     <!-- TAB TỔNG QUAN -->
     <div id="tabOverview" style="display: flex; flex-direction: column; gap: 16px;">
       
-      <!-- BẢO VỆ TIẾT KIỆM NỀN -->
+      <!-- SỔ TIẾT KIỆM NỀN TẢNG BẢO VỆ 320M -->
       <div class="card card-banner">
         <div style="display: flex; justify-content: space-between; align-items: center;">
-          <span class="badge" style="background: rgba(255,255,255,0.25);">🛡️ Tiết Kiệm Nền Tảng Bảo Vệ</span>
+          <span class="badge" style="background: rgba(255,255,255,0.22); font-weight: 800;">🛡️ Tiết Kiệm Nền Tảng Bảo Vệ</span>
           <span class="badge badge-green">Giữ nguyên</span>
         </div>
-        <div style="font-size: 28px; font-weight: 900; margin: 8px 0;" id="txtProtectedSavings">320.000.000 ₫</div>
-        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; opacity: 0.9;">
+        <div style="font-size: 30px; font-weight: 900; margin: 10px 0 6px 0; letter-spacing: -0.03em;" id="txtProtectedSavings">320.000.000 ₫</div>
+        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; opacity: 0.95; font-weight: 500;">
           <span>Khóa cứng độc lập</span>
-          <span>Dự kiến tiết kiệm mới: <b id="txtNewSavings">+0 ₫</b></span>
+          <span>Dự kiến tiết kiệm mới: <b id="txtNewSavings" style="font-weight: 800;">+0 ₫</b></span>
         </div>
       </div>
 
-      <!-- NGUỒN TIẾT KIỆM CỦA BÉ (BẢO HIỂM & CSVC ĐẦU NĂM) -->
+      <!-- QUỸ TIẾT KIỆM BÉ (BẢO HIỂM & CSVC ĐẦU NĂM) -->
       <div class="card" style="background: #faf5ff; border-color: #e9d5ff;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
           <span class="badge badge-purple">👶 Quỹ Tiết Kiệm Riêng Của Bé</span>
           <span style="font-size: 12px; color: #6b21a8; font-weight: 700;" id="txtBabySavingsSpent">Đã trích: 0 ₫</span>
         </div>
-        <div style="font-weight: 800; font-size: 15px; margin-bottom: 6px;">Chi Các Khoản Lớn & Định Kỳ Cho Con</div>
+        <div style="font-weight: 800; font-size: 15px; margin-bottom: 8px;">Chi Các Khoản Lớn & Định Kỳ Cho Con</div>
         <div class="grid-2">
-          <div class="grid-item" style="background: #fff;">
-            <div style="font-weight: 700; color: #334155;">1. CSVC & Sự kiện Edison</div>
-            <div style="font-size: 15px; font-weight: 900; color: #0f172a; margin: 4px 0;" id="txtSchoolOneTime">1.520.000 ₫</div>
+          <div class="grid-item" style="background: #fff; border-color: #f3e8ff;">
+            <div style="font-weight: 700; color: #334155; font-size: 12px;">1. CSVC & Sự kiện Edison</div>
+            <div style="font-size: 16px; font-weight: 900; color: #0f172a; margin: 4px 0 8px 0;" id="txtSchoolOneTime">1.520.000 ₫</div>
             <div id="btnAreaSchoolOneTime">
-              <button class="btn btn-purple" style="width: 100%; font-size: 11px; padding: 6px;" onclick="paySchoolOneTime()">Trích Quỹ Bé Đóng</button>
+              <button class="btn btn-purple" style="width: 100%; font-size: 11px; padding: 7px;" onclick="paySchoolOneTime()">Trích Quỹ Bé Đóng</button>
             </div>
           </div>
-          <div class="grid-item" style="background: #fff;">
-            <div style="font-weight: 700; color: #334155;">2. Bảo hiểm nhân thọ (T11)</div>
-            <div style="font-size: 15px; font-weight: 900; color: #6b21a8; margin: 4px 0;" id="txtInsuranceAmount">Chưa nhập</div>
+          <div class="grid-item" style="background: #fff; border-color: #f3e8ff;">
+            <div style="font-weight: 700; color: #334155; font-size: 12px;">2. Bảo hiểm nhân thọ (T11)</div>
+            <div style="font-size: 16px; font-weight: 900; color: #6b21a8; margin: 4px 0 8px 0;" id="txtInsuranceAmount">Chưa nhập</div>
             <div id="btnAreaInsurance">
-              <button class="btn btn-purple" style="width: 100%; font-size: 11px; padding: 6px;" onclick="payInsurance()">Trích Quỹ Bé Đóng</button>
+              <button class="btn btn-purple" style="width: 100%; font-size: 11px; padding: 7px;" onclick="payInsurance()">Trích Quỹ Bé Đóng</button>
             </div>
           </div>
         </div>
@@ -102,14 +127,14 @@
           <span style="font-size: 12px; color: #64748b; font-weight: 600;">Hạn mức: 11.000.000 ₫</span>
         </div>
         <div style="display: flex; justify-content: space-between; align-items: baseline; margin-top: 10px;">
-          <div style="font-size: 26px; font-weight: 900; color: #059669;" id="txtLivingRemaining">11.000.000 ₫</div>
-          <div style="font-size: 13px; color: #64748b;">Đã tiêu: <b id="txtLivingSpent" style="color: #0f172a;">0 ₫</b></div>
+          <div style="font-size: 28px; font-weight: 900; color: #059669; letter-spacing: -0.02em;" id="txtLivingRemaining">11.000.000 ₫</div>
+          <div style="font-size: 13px; color: #64748b;">Đã tiêu: <b id="txtLivingSpent" style="color: #0f172a; font-weight: 800;">0 ₫</b></div>
         </div>
         <div class="progress-bar">
           <div class="progress-fill" id="barLiving" style="width: 0%; background: #059669;"></div>
         </div>
         
-        <div style="font-size: 13px; font-weight: 700; color: #334155; margin: 12px 0 6px 0;">Chi tiết 5 nhóm trong 11 triệu:</div>
+        <div style="font-size: 13px; font-weight: 800; color: #334155; margin: 12px 0 8px 0;">Chi tiết 5 nhóm trong 11 triệu:</div>
         <div id="listBreakdown" style="display: flex; flex-direction: column; gap: 8px;"></div>
       </div>
 
@@ -117,23 +142,23 @@
       <div class="card">
         <div style="display: flex; justify-content: space-between; align-items: center;">
           <span class="badge badge-blue">Phễu 2: Học Phí Thường Tháng Của Bé</span>
-          <span style="font-size: 16px; font-weight: 900; color: #1e40af;" id="txtSchoolMonthly">4.650.000 ₫</span>
+          <span style="font-size: 17px; font-weight: 900; color: #1e40af;" id="txtSchoolMonthly">4.650.000 ₫</span>
         </div>
-        <div style="font-size: 12px; color: #64748b; margin-top: 4px;">
+        <div style="font-size: 12px; color: #64748b; margin-top: 5px; line-height: 1.4;">
           Gồm: Học phí 3.15M + Tiền ăn 26 ngày (1.3M) + Học liệu & điều hòa (200k). Trích từ Thu Nhập Tháng.
         </div>
-        <div style="margin-top: 10px;" id="btnAreaSchoolMonthly">
-          <button class="btn btn-blue" style="width: 100%; font-size: 12px;" onclick="paySchoolMonthly()">Xác Nhận Đã Đóng Học Phí Tháng</button>
+        <div style="margin-top: 12px;" id="btnAreaSchoolMonthly">
+          <button class="btn btn-blue" style="width: 100%; font-size: 12.5px; padding: 10px;" onclick="paySchoolMonthly()">Xác Nhận Đã Đóng Học Phí Tháng</button>
         </div>
       </div>
 
       <!-- THẺ TÍN DỤNG -->
       <div class="card" style="display: flex; justify-content: space-between; align-items: center;">
         <div>
-          <div style="font-weight: 700; font-size: 14px;">💳 Đã quẹt thẻ tín dụng tháng này</div>
-          <div style="font-size: 11px; color: #64748b;">Thanh toán sao kê ngày 20</div>
+          <div style="font-weight: 800; font-size: 14px;">💳 Đã quẹt thẻ tín dụng tháng này</div>
+          <div style="font-size: 11px; color: #64748b; margin-top: 1px;">Thanh toán sao kê ngày 20</div>
         </div>
-        <div style="font-size: 16px; font-weight: 900; color: #e11d48;" id="txtCreditSpent">0 ₫</div>
+        <div style="font-size: 17px; font-weight: 900; color: #e11d48;" id="txtCreditSpent">0 ₫</div>
       </div>
 
     </div>
@@ -141,7 +166,7 @@
     <!-- TAB LỊCH SỬ -->
     <div id="tabTransactions" style="display: none; flex-direction: column; gap: 12px;">
       <div class="card" style="padding: 12px;">
-        <input type="text" id="inputSearch" placeholder="🔍 Tìm tên món chi tiêu..." oninput="renderTransactions()" />
+        <input type="text" id="inputSearch" placeholder="🔍 Tìm tên món chi tiêu (thịt, sữa, điện...)..." oninput="renderTransactions()" />
       </div>
       <div class="card">
         <div style="font-weight: 800; font-size: 15px; margin-bottom: 8px;">Lịch Sử Chi Tiêu Tháng Này</div>
@@ -149,8 +174,24 @@
       </div>
     </div>
 
-    <!-- TAB CÀI ĐẶT -->
+    <!-- TAB CÀI ĐẶT & KẾT NỐI SUPABASE -->
     <div id="tabSettings" style="display: none; flex-direction: column; gap: 14px;">
+      <div class="card" style="background: #f0fdf4; border-color: #bbf7d0;">
+        <div style="font-weight: 800; font-size: 15px; color: #166534; margin-bottom: 6px;">⚡ Kết Nối Supabase (Đồng Bộ Đám Mây)</div>
+        <p style="font-size: 12px; color: #15803d; margin-bottom: 12px; line-height: 1.4;">Dữ liệu tự động đồng bộ trên đám mây, 2 vợ chồng cùng mở trên 2 điện thoại đều xem và nhập được ngay.</p>
+        <div style="display: flex; flex-direction: column; gap: 8px; font-size: 12px;">
+          <div>
+            <label style="font-weight: 700; color: #166534;">Project URL:</label>
+            <input type="text" id="cfgSupaUrl" placeholder="https://xxxx.supabase.co" />
+          </div>
+          <div>
+            <label style="font-weight: 700; color: #166534;">Anon Public Key:</label>
+            <input type="password" id="cfgSupaKey" placeholder="eyJhbGciOi..." />
+          </div>
+          <button class="btn btn-emerald" style="padding: 11px; margin-top: 4px;" onclick="saveSupabaseConfig()">Lưu & Kết Nối Supabase</button>
+        </div>
+      </div>
+
       <div class="card">
         <div style="font-weight: 800; font-size: 15px; margin-bottom: 12px;">Tùy Chỉnh Định Mức Của Bạn</div>
         <div style="display: flex; flex-direction: column; gap: 10px; font-size: 13px;">
@@ -174,8 +215,8 @@
       </div>
 
       <div class="card" style="display: flex; gap: 10px;">
-        <button class="btn btn-outline" style="flex: 1;" onclick="exportBackup()">📁 Xuất File Sao Lưu</button>
-        <button class="btn btn-emerald" style="flex: 1;" onclick="document.getElementById('fileBackup').click()">📥 Nạp Lại File Cũ</button>
+        <button class="btn btn-outline" style="flex: 1;" onclick="exportBackup()">📁 Xuất File JSON</button>
+        <button class="btn btn-emerald" style="flex: 1;" onclick="document.getElementById('fileBackup').click()">📥 Nạp File JSON</button>
         <input type="file" id="fileBackup" style="display: none;" accept=".json" onchange="importBackup(event)" />
       </div>
     </div>
@@ -185,16 +226,16 @@
   <!-- THANH BOTTOM BAR -->
   <nav class="nav-bottom">
     <button class="nav-btn active" id="btnNavOverview" onclick="switchTab('overview')">
-      <span style="font-size: 18px;">📊</span>
+      <span style="font-size: 19px;">📊</span>
       <span>Dòng Tiền</span>
     </button>
     <button class="fab-btn" onclick="openModal()">+</button>
     <button class="nav-btn" id="btnNavTx" onclick="switchTab('transactions')">
-      <span style="font-size: 18px;">📝</span>
+      <span style="font-size: 19px;">📝</span>
       <span>Lịch Sử</span>
     </button>
     <button class="nav-btn" id="btnNavSettings" onclick="switchTab('settings')">
-      <span style="font-size: 18px;">⚙️</span>
+      <span style="font-size: 19px;">⚙️</span>
       <span>Cài Đặt</span>
     </button>
   </nav>
@@ -204,26 +245,26 @@
     <div class="modal-box">
       <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f1f5f9; padding-bottom: 8px;">
         <div style="font-weight: 800; font-size: 16px;">Ghi Khoản Chi Mới</div>
-        <button onclick="closeModal()" style="border: none; background: none; font-size: 20px; cursor: pointer;">✕</button>
+        <button onclick="closeModal()" style="border: none; background: none; font-size: 20px; color: #94a3b8; cursor: pointer;">✕</button>
       </div>
       <div>
-        <label style="font-size: 12px; font-weight: 700; color: #64748b;">Tên khoản chi:</label>
-        <input type="text" id="addTitle" placeholder="VD: Mua rau, thịt, sữa chua..." />
+        <label style="font-size: 12px; font-weight: 700; color: #64748b; margin-bottom: 4px; display: block;">Tên khoản chi:</label>
+        <input type="text" id="addTitle" placeholder="VD: Mua rau, thịt bò, bỉm sữa..." />
       </div>
       <div>
-        <label style="font-size: 12px; font-weight: 700; color: #64748b;">Số tiền (VNĐ):</label>
+        <label style="font-size: 12px; font-weight: 700; color: #64748b; margin-bottom: 4px; display: block;">Số tiền (VNĐ):</label>
         <input type="number" id="addAmount" placeholder="VD: 50000" />
       </div>
       <div>
-        <label style="font-size: 12px; font-weight: 700; color: #64748b;">Nguồn tiền trích ra:</label>
+        <label style="font-size: 12px; font-weight: 700; color: #64748b; margin-bottom: 4px; display: block;">Nguồn tiền trích ra:</label>
         <select id="addSource">
-          <option value="monthly_income">💵 Từ Thu Nhập Tháng (Thuộc gói 11M hoặc tiền học)</option>
+          <option value="monthly_income">💵 Từ Thu Nhập Tháng (Gói 11M hoặc tiền học)</option>
           <option value="baby_savings">👶 Rút từ Tiết Kiệm Của Bé (Bảo hiểm & CSVC đầu năm)</option>
         </select>
       </div>
       <div class="grid-2">
         <div>
-          <label style="font-size: 12px; font-weight: 700; color: #64748b;">Nhóm:</label>
+          <label style="font-size: 12px; font-weight: 700; color: #64748b; margin-bottom: 4px; display: block;">Nhóm:</label>
           <select id="addCat">
             <option value="Ăn uống & Đi chợ">Ăn uống & Đi chợ</option>
             <option value="Em bé & Con cái">Em bé & Con cái</option>
@@ -233,7 +274,7 @@
           </select>
         </div>
         <div>
-          <label style="font-size: 12px; font-weight: 700; color: #64748b;">Hình thức:</label>
+          <label style="font-size: 12px; font-weight: 700; color: #64748b; margin-bottom: 4px; display: block;">Hình thức:</label>
           <select id="addMethod">
             <option value="Chuyển khoản">Chuyển khoản</option>
             <option value="Tiền mặt">Tiền mặt</option>
@@ -246,9 +287,9 @@
   </div>
 
   <script>
-    // DỮ LIỆU GỐC & KHỞI TẠO CƠ SỞ DỮ LIỆU CỤC BỘ
-    const STORAGE_KEY = 'GIA_DINH_VANILLA_PRO_V1';
-    
+    const LOCAL_KEY = 'GIA_DINH_VANILLA_SUPA_V1';
+    let supaClient = null;
+
     let defaultData = {
       protectedSavings: 320000000,
       livingBudget: 11000000,
@@ -268,26 +309,63 @@
     let appData = defaultData;
     let currentMonth = '2026-11';
 
-    function loadData() {
-      try {
-        const saved = localStorage.getItem(STORAGE_KEY);
-        if (saved) {
-          appData = Object.assign({}, defaultData, JSON.parse(saved));
-        } else {
-          // Thử nạp từ các khóa cũ
-          const old = localStorage.getItem('GIA_DINH_4PHEU_FULL_CONFIG_V1') || localStorage.getItem('GIA_DINH_TAI_CHINH_PRO_V4');
-          if (old) {
-            const p = JSON.parse(old);
-            if (p.transactions) appData.transactions = p.transactions;
-          }
+    function initSupabase() {
+      const url = localStorage.getItem('SUPABASE_URL');
+      const key = localStorage.getItem('SUPABASE_KEY');
+      if (url && key && window.supabase) {
+        try {
+          supaClient = window.supabase.createClient(url, key);
+          const badge = document.getElementById('badgeSync');
+          badge.className = 'status-badge status-online';
+          badge.innerText = 'Đã kết nối Cloud';
+          syncFromSupabase();
+        } catch (e) {
+          console.error("Lỗi kết nối Supabase:", e);
         }
-      } catch (e) {
-        appData = defaultData;
       }
     }
 
-    function saveData() {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
+    async function syncFromSupabase() {
+      if (!supaClient) return;
+      try {
+        const { data: txs, error } = await supaClient.from('transactions').select('*').order('created_at', { ascending: false });
+        if (!error && txs) {
+          appData.transactions = txs.map(t => ({
+            id: Number(t.id),
+            title: t.title,
+            amount: Number(t.amount),
+            source: t.source,
+            bucket: t.bucket,
+            cat: t.cat,
+            method: t.method,
+            monthKey: t.month_key
+          }));
+          saveLocal();
+        }
+      } catch (err) {
+        console.error("Lỗi đồng bộ Cloud:", err);
+      }
+    }
+
+    function saveSupabaseConfig() {
+      const url = document.getElementById('cfgSupaUrl').value.trim();
+      const key = document.getElementById('cfgSupaKey').value.trim();
+      if (!url || !key) return alert('Vui lòng điền đủ Project URL và Key!');
+      localStorage.setItem('SUPABASE_URL', url);
+      localStorage.setItem('SUPABASE_KEY', key);
+      alert('Đã lưu cấu hình! Hệ thống đang kết nối...');
+      initSupabase();
+    }
+
+    function loadLocal() {
+      try {
+        const saved = localStorage.getItem(LOCAL_KEY);
+        if (saved) appData = Object.assign({}, defaultData, JSON.parse(saved));
+      } catch (e) { appData = defaultData; }
+    }
+
+    function saveLocal() {
+      localStorage.setItem(LOCAL_KEY, JSON.stringify(appData));
       render();
     }
 
@@ -312,6 +390,8 @@
       document.getElementById('btnNavSettings').classList.toggle('active', tab === 'settings');
 
       if (tab === 'settings') {
+        document.getElementById('cfgSupaUrl').value = localStorage.getItem('SUPABASE_URL') || '';
+        document.getElementById('cfgSupaKey').value = localStorage.getItem('SUPABASE_KEY') || '';
         document.getElementById('cfgProtected').value = appData.protectedSavings;
         document.getElementById('cfgLiving').value = appData.livingBudget;
         document.getElementById('cfgInsurance').value = appData.insuranceQuarterly;
@@ -322,7 +402,6 @@
     function render() {
       const txs = appData.transactions.filter(t => t.monthKey === currentMonth);
 
-      // 1. Phễu 1: Sinh hoạt 11M
       const livingTxs = txs.filter(t => t.source !== 'baby_savings' && t.bucket !== 'school_monthly');
       const livingSpent = livingTxs.reduce((s, t) => s + t.amount, 0);
       const livingRemaining = Math.max(0, appData.livingBudget - livingSpent);
@@ -336,13 +415,12 @@
       bar.style.width = livingPercent + '%';
       bar.style.background = livingSpent > appData.livingBudget ? '#e11d48' : '#059669';
 
-      // 5 nhóm con
       let breakdownHtml = '';
       appData.breakdown.forEach(b => {
         const spent = livingTxs.filter(t => t.cat === b.name || (t.cat && t.cat.includes(b.name.split(' ')[0]))).reduce((s, t) => s + t.amount, 0);
         const p = b.limit > 0 ? Math.min(100, Math.round((spent / b.limit) * 100)) : 0;
         breakdownHtml += `
-          <div style="font-size: 12px; background: #f8fafc; padding: 8px 10px; border-radius: 10px; border: 1px solid #f1f5f9;">
+          <div style="font-size: 12px; background: #f8fafc; padding: 9px 12px; border-radius: 12px; border: 1px solid #f1f5f9;">
             <div style="display: flex; justify-content: space-between; font-weight: 700;">
               <span>${b.name}</span>
               <span style="color: ${spent > b.limit ? '#e11d48' : '#334155'};">${formatVND(spent)} / ${formatVND(b.limit)}</span>
@@ -355,7 +433,6 @@
       });
       document.getElementById('listBreakdown').innerHTML = breakdownHtml;
 
-      // 2. Tiết kiệm bé (Bảo hiểm & CSVC)
       const babySpent = txs.filter(t => t.source === 'baby_savings').reduce((s, t) => s + t.amount, 0);
       document.getElementById('txtBabySavingsSpent').innerText = `Đã trích: ${formatVND(babySpent)}`;
       document.getElementById('txtSchoolOneTime').innerText = formatVND(appData.schoolOneTime);
@@ -363,29 +440,25 @@
 
       const hasPaidOneTime = txs.some(t => t.bucket === 'school_onetime');
       document.getElementById('btnAreaSchoolOneTime').innerHTML = hasPaidOneTime 
-        ? `<span class="badge badge-green" style="display: block; text-align: center; padding: 6px;">✓ Đã đóng</span>`
-        : `<button class="btn btn-purple" style="width: 100%; font-size: 11px; padding: 6px;" onclick="paySchoolOneTime()">Trích Quỹ Bé Đóng</button>`;
+        ? `<span class="badge badge-green" style="display: block; text-align: center; padding: 7px;">✓ Đã đóng</span>`
+        : `<button class="btn btn-purple" style="width: 100%; font-size: 11px; padding: 7px;" onclick="paySchoolOneTime()">Trích Quỹ Bé Đóng</button>`;
 
       const hasPaidInsurance = txs.some(t => t.bucket === 'insurance');
       document.getElementById('btnAreaInsurance').innerHTML = hasPaidInsurance
-        ? `<span class="badge badge-green" style="display: block; text-align: center; padding: 6px;">✓ Đã đóng</span>`
-        : `<button class="btn btn-purple" style="width: 100%; font-size: 11px; padding: 6px;" onclick="payInsurance()">Trích Quỹ Bé Đóng</button>`;
+        ? `<span class="badge badge-green" style="display: block; text-align: center; padding: 7px;">✓ Đã đóng</span>`
+        : `<button class="btn btn-purple" style="width: 100%; font-size: 11px; padding: 7px;" onclick="payInsurance()">Trích Quỹ Bé Đóng</button>`;
 
-      // 3. Học phí thường tháng
       document.getElementById('txtSchoolMonthly').innerText = formatVND(appData.schoolMonthly);
       const hasPaidMonthly = txs.some(t => t.bucket === 'school_monthly');
       document.getElementById('btnAreaSchoolMonthly').innerHTML = hasPaidMonthly
-        ? `<span class="badge badge-green" style="display: block; text-align: center; padding: 8px; font-size: 13px;">✓ Đã đóng tiền tháng</span>`
-        : `<button class="btn btn-blue" style="width: 100%; font-size: 12px;" onclick="paySchoolMonthly()">Xác Nhận Đã Đóng Học Phí Tháng</button>`;
+        ? `<span class="badge badge-green" style="display: block; text-align: center; padding: 9px; font-size: 13px;">✓ Đã đóng tiền tháng</span>`
+        : `<button class="btn btn-blue" style="width: 100%; font-size: 12.5px; padding: 10px;" onclick="paySchoolMonthly()">Xác Nhận Đã Đóng Học Phí Tháng</button>`;
 
-      // 4. Thẻ tín dụng
       const credit = txs.filter(t => t.method === 'Thẻ tín dụng').reduce((s, t) => s + t.amount, 0);
       document.getElementById('txtCreditSpent').innerText = formatVND(credit);
 
-      // 5. Tiết kiệm mới tích lũy
       const monthlySpent = txs.filter(t => t.source !== 'baby_savings').reduce((s, t) => s + t.amount, 0);
-      const estIncome = 25000000;
-      const newSav = Math.max(0, estIncome - (monthlySpent > 0 ? monthlySpent : (appData.livingBudget + appData.schoolMonthly)));
+      const newSav = Math.max(0, 25000000 - (monthlySpent > 0 ? monthlySpent : (appData.livingBudget + appData.schoolMonthly)));
       document.getElementById('txtNewSavings').innerText = `+${formatVND(newSav)}`;
 
       renderTransactions();
@@ -404,7 +477,7 @@
             <div class="tx-item">
               <div>
                 <div style="font-weight: 700; font-size: 14px;">${t.title}</div>
-                <div style="font-size: 11px; color: #64748b; margin-top: 2px;">
+                <div style="font-size: 11.5px; color: #64748b; margin-top: 2px;">
                   <span>${t.cat}</span> • <span>${t.method}</span> • 
                   <b style="color: ${t.source === 'baby_savings' ? '#7c3aed' : '#059669'};">
                     ${t.source === 'baby_savings' ? 'Rút quỹ bé' : 'Thu nhập tháng'}
@@ -412,8 +485,8 @@
                 </div>
               </div>
               <div style="display: flex; align-items: center; gap: 8px;">
-                <span style="font-weight: 900; color: #e11d48; font-size: 14px;">-${formatVND(t.amount)}</span>
-                <button onclick="deleteTx(${t.id})" style="border: none; background: none; color: #cbd5e1; font-size: 16px; cursor: pointer;">✕</button>
+                <span style="font-weight: 800; color: #e11d48; font-size: 14.5px;">-${formatVND(t.amount)}</span>
+                <button onclick="deleteTx(${t.id})" style="border: none; background: none; color: #cbd5e1; font-size: 16px; cursor: pointer; padding: 4px;">✕</button>
               </div>
             </div>
           `;
@@ -422,9 +495,31 @@
       document.getElementById('txContainer').innerHTML = html;
     }
 
+    async function recordTransaction(tx) {
+      appData.transactions.unshift(tx);
+      saveLocal();
+
+      if (supaClient) {
+        try {
+          await supaClient.from('transactions').insert([{
+            id: tx.id,
+            title: tx.title,
+            amount: tx.amount,
+            source: tx.source,
+            bucket: tx.bucket,
+            cat: tx.cat,
+            method: tx.method,
+            month_key: tx.monthKey
+          }]);
+        } catch (e) {
+          console.error("Lỗi đẩy lên Supabase:", e);
+        }
+      }
+    }
+
     function paySchoolOneTime() {
-      if (confirm(`Rút từ Tiết Kiệm Bé để đóng CSVC & Sự kiện (${formatVND(appData.schoolOneTime)})?`)) {
-        appData.transactions.unshift({
+      if (confirm(`Rút từ Tiết Kiệm Bé đóng CSVC & Sự kiện (${formatVND(appData.schoolOneTime)})?`)) {
+        recordTransaction({
           id: Date.now(),
           title: 'CSVC & Sự kiện đầu năm Edison Reggio',
           amount: appData.schoolOneTime,
@@ -434,7 +529,6 @@
           method: 'Chuyển khoản',
           monthKey: currentMonth
         });
-        saveData();
       }
     }
 
@@ -446,8 +540,8 @@
         amt = parseInt(val.replace(/[^0-9]/g, ''), 10) || 0;
         appData.insuranceQuarterly = amt;
       }
-      if (confirm(`Rút từ Tiết Kiệm Bé để đóng Bảo hiểm nhân thọ (${formatVND(amt)})?`)) {
-        appData.transactions.unshift({
+      if (confirm(`Rút từ Tiết Kiệm Bé đóng Bảo hiểm nhân thọ (${formatVND(amt)})?`)) {
+        recordTransaction({
           id: Date.now(),
           title: 'Đóng bảo hiểm nhân thọ',
           amount: amt,
@@ -457,13 +551,12 @@
           method: 'Chuyển khoản',
           monthKey: currentMonth
         });
-        saveData();
       }
     }
 
     function paySchoolMonthly() {
-      if (confirm(`Đóng học phí thường tháng Edison Reggio (${formatVND(appData.schoolMonthly)}) từ Thu Nhập Tháng?`)) {
-        appData.transactions.unshift({
+      if (confirm(`Đóng học phí thường tháng Edison (${formatVND(appData.schoolMonthly)}) từ Thu Nhập Tháng?`)) {
+        recordTransaction({
           id: Date.now(),
           title: 'Học phí thường tháng Edison Reggio',
           amount: appData.schoolMonthly,
@@ -473,14 +566,18 @@
           method: 'Chuyển khoản',
           monthKey: currentMonth
         });
-        saveData();
       }
     }
 
-    function deleteTx(id) {
+    async function deleteTx(id) {
       if (confirm('Xóa khoản chi này?')) {
         appData.transactions = appData.transactions.filter(t => t.id !== id);
-        saveData();
+        saveLocal();
+        if (supaClient) {
+          try {
+            await supaClient.from('transactions').delete().eq('id', id);
+          } catch (e) {}
+        }
       }
     }
 
@@ -492,7 +589,7 @@
       const amount = parseInt(document.getElementById('addAmount').value, 10) || 0;
       if (!title || amount <= 0) return alert('Vui lòng nhập tên và số tiền hợp lệ!');
 
-      appData.transactions.unshift({
+      recordTransaction({
         id: Date.now(),
         title: title,
         amount: amount,
@@ -505,13 +602,11 @@
       document.getElementById('addTitle').value = '';
       document.getElementById('addAmount').value = '';
       closeModal();
-      saveData();
     }
 
     function updateConfig(key, val) {
-      const n = parseInt(val, 10) || 0;
-      appData[key] = n;
-      saveData();
+      appData[key] = parseInt(val, 10) || 0;
+      saveLocal();
     }
 
     function exportBackup() {
@@ -531,7 +626,7 @@
           const p = JSON.parse(ev.target.result);
           if (p.transactions) {
             appData = Object.assign({}, defaultData, p);
-            saveData();
+            saveLocal();
             alert('Nạp dữ liệu thành công!');
           }
         } catch (err) { alert('Tệp sao lưu bị lỗi!'); }
@@ -539,9 +634,9 @@
       r.readAsText(f);
     }
 
-    // Khởi chạy
-    loadData();
+    loadLocal();
     render();
+    initSupabase();
   </script>
 </body>
 </html>
