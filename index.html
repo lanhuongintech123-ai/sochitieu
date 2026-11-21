@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Sổ Thu Chi & Phân Bổ Dòng Tiền Gia Đình</title>
+  <title>Sổ Dòng Tiền Gia Đình - Tùy Biến Toàn Diện</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
   
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -20,44 +20,64 @@
       letter-spacing: -0.015em;
       -webkit-font-smoothing: antialiased;
     }
-    body { background-color: #f8fafc; color: #1e293b; padding-bottom: 95px; }
-    header { background: #fff; border-bottom: 1px solid #e2e8f0; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 20; }
+    body { background-color: #f1f5f9; color: #0f172a; padding-bottom: 95px; }
+    
+    header { background: #fff; border-bottom: 1px solid #e2e8f0; padding: 12px 18px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 20; }
     .logo-area { display: flex; align-items: center; gap: 10px; }
-    .logo-icon { width: 38px; height: 38px; border-radius: 12px; background: #059669; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 18px; box-shadow: 0 4px 8px rgba(5,150,105,0.2); }
+    .logo-icon { width: 40px; height: 40px; border-radius: 12px; background: #059669; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 4px 10px rgba(5,150,105,0.25); }
     .status-badge { font-size: 10.5px; font-weight: 700; padding: 2px 8px; border-radius: 99px; }
     .status-online { background: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; }
-    .status-offline { background: #fee2e2; color: #991b1b; }
-    .container { max-width: 760px; margin: 0 auto; padding: 16px; display: flex; flex-direction: column; gap: 16px; }
-    .card { background: #fff; border-radius: 24px; border: 1px solid #e2e8f0; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.02); }
-    .card-banner { background: linear-gradient(135deg, #059669, #0d9488); color: #fff; border: none; box-shadow: 0 8px 20px rgba(5,150,105,0.15); }
-    .badge { display: inline-block; font-size: 11px; font-weight: 800; padding: 3px 9px; border-radius: 99px; text-transform: uppercase; letter-spacing: 0.02em; }
-    .badge-amber { background: #fef3c7; color: #92400e; }
-    .badge-purple { background: #f3e8ff; color: #6b21a8; }
-    .badge-blue { background: #dbeafe; color: #1e40af; }
+    .status-offline { background: #f1f5f9; color: #64748b; }
+    
+    .container { max-width: 760px; margin: 0 auto; padding: 14px; display: flex; flex-direction: column; gap: 14px; }
+    .card { background: #fff; border-radius: 22px; border: 1px solid #e2e8f0; padding: 18px; box-shadow: 0 2px 6px rgba(0,0,0,0.02); }
+    
+    .badge { display: inline-block; font-size: 10.5px; font-weight: 800; padding: 3px 9px; border-radius: 99px; text-transform: uppercase; letter-spacing: 0.02em; }
     .badge-green { background: #d1fae5; color: #065f46; }
-    .progress-bar { width: 100%; height: 10px; background: #e2e8f0; border-radius: 99px; overflow: hidden; margin: 10px 0; }
+    .badge-amber { background: #fef3c7; color: #92400e; }
+    .badge-blue { background: #dbeafe; color: #1e40af; }
+    .badge-purple { background: #f3e8ff; color: #6b21a8; }
+    .badge-rose { background: #ffe4e6; color: #9f1239; }
+    .badge-sky { background: #e0f2fe; color: #0369a1; }
+
+    .flow-summary { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+    .flow-box { border-radius: 16px; padding: 12px 14px; display: flex; flex-direction: column; gap: 4px; }
+    .flow-in { background: #ecfdf5; border: 1px solid #a7f3d0; }
+    .flow-out { background: #fff1f2; border: 1px solid #fecdd3; }
+    .flow-net { background: #f0fdf4; border: 1.5px solid #059669; grid-column: span 2; padding: 14px; border-radius: 16px; }
+
+    .progress-bar { width: 100%; height: 9px; background: #e2e8f0; border-radius: 99px; overflow: hidden; margin: 8px 0; }
     .progress-fill { height: 100%; border-radius: 99px; transition: width 0.4s ease; }
+
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     .grid-item { background: #f8fafc; border: 1px solid #f1f5f9; border-radius: 16px; padding: 12px; font-size: 13px; }
-    .btn { padding: 9px 15px; border-radius: 12px; font-weight: 700; font-size: 13px; border: none; cursor: pointer; transition: all 0.15s ease; }
+
+    .btn { padding: 9px 14px; border-radius: 12px; font-weight: 700; font-size: 12.5px; border: none; cursor: pointer; transition: all 0.15s ease; }
     .btn:active { transform: scale(0.97); }
     .btn-emerald { background: #059669; color: #fff; box-shadow: 0 2px 6px rgba(5,150,105,0.25); }
     .btn-purple { background: #7c3aed; color: #fff; box-shadow: 0 2px 6px rgba(124,58,237,0.25); }
     .btn-blue { background: #2563eb; color: #fff; box-shadow: 0 2px 6px rgba(37,99,235,0.25); }
+    .btn-sky { background: #0284c7; color: #fff; }
     .btn-outline { background: #fff; border: 1px solid #cbd5e1; color: #475569; }
-    .tx-item { display: flex; justify-content: space-between; align-items: center; padding: 13px 0; border-bottom: 1px solid #f1f5f9; }
+    .btn-danger-ghost { background: #fee2e2; color: #b91c1c; padding: 6px 10px; border-radius: 8px; font-size: 12px; border: none; cursor: pointer; font-weight: 700; }
+
+    .tx-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #f1f5f9; }
+
     .nav-bottom { position: fixed; bottom: 0; left: 0; right: 0; height: 68px; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-top: 1px solid #e2e8f0; display: flex; justify-content: space-around; align-items: center; z-index: 30; }
-    .nav-btn { display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 10.5px; font-weight: 700; color: #64748b; border: none; background: none; cursor: pointer; }
+    .nav-btn { display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 11px; font-weight: 700; color: #64748b; border: none; background: none; cursor: pointer; }
     .nav-btn.active { color: #059669; }
     .fab-btn { width: 50px; height: 50px; border-radius: 50%; background: #059669; color: #fff; font-size: 26px; font-weight: 900; border: 3px solid #fff; box-shadow: 0 6px 14px rgba(5,150,105,0.35); margin-top: -24px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
     .fab-btn:active { transform: scale(0.92); }
+
     .modal-overlay { position: fixed; inset: 0; background: rgba(15,23,42,0.55); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; z-index: 50; padding: 16px; }
-    .modal-box { background: #fff; width: 100%; max-width: 400px; border-radius: 24px; padding: 22px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 20px 30px rgba(0,0,0,0.12); }
-    input, select { width: 100%; padding: 10px 12px; border-radius: 12px; border: 1px solid #cbd5e1; font-size: 13px; font-weight: 600; outline: none; background: #fff; }
+    .modal-box { background: #fff; width: 100%; max-width: 420px; border-radius: 24px; padding: 22px; display: flex; flex-direction: column; gap: 13px; box-shadow: 0 20px 30px rgba(0,0,0,0.12); max-height: 90vh; overflow-y: auto; }
+    
+    input, select { width: 100%; padding: 10px 12px; border-radius: 12px; border: 1px solid #cbd5e1; font-size: 13.5px; font-weight: 600; outline: none; background: #fff; }
     input:focus, select:focus { border-color: #059669; box-shadow: 0 0 0 3px rgba(5,150,105,0.12); }
     .form-group { display: flex; flex-direction: column; gap: 4px; }
-    .form-label { font-size: 11.5px; font-weight: 700; color: #475569; }
-    .section-title { font-size: 14px; font-weight: 800; color: #0f172a; margin-top: 6px; padding-bottom: 6px; border-bottom: 1px dashed #e2e8f0; }
+    .form-label { font-size: 12px; font-weight: 700; color: #475569; }
+    .section-title { font-size: 13.5px; font-weight: 800; color: #0f172a; margin-top: 8px; padding-bottom: 6px; border-bottom: 1.5px dashed #e2e8f0; display: flex; align-items: center; justify-content: space-between; }
+    .row-item { display: flex; gap: 6px; align-items: center; background: #f8fafc; padding: 8px; border-radius: 12px; border: 1px solid #e2e8f0; }
   </style>
 </head>
 <body>
@@ -66,10 +86,10 @@
     <div class="logo-area">
       <div class="logo-icon">💎</div>
       <div>
-        <div style="font-weight: 800; font-size: 15px;">Sổ Thu Chi Gia Đình</div>
+        <div style="font-weight: 800; font-size: 15px;">Sổ Quản Lý Dòng Tiền</div>
         <div style="display: flex; align-items: center; gap: 6px; margin-top: 2px;">
-          <span style="font-size: 11px; color: #059669; font-weight: 700;" id="txtHeaderMonth">Tháng 11/2026</span>
-          <span class="status-badge status-offline" id="badgeSync">Chưa kết nối Cloud</span>
+          <span style="font-size: 11px; color: #059669; font-weight: 800;" id="txtHeaderMonth">Tháng 11/2026</span>
+          <span class="status-badge status-offline" id="badgeSync">Lưu trình duyệt</span>
         </div>
       </div>
     </div>
@@ -80,189 +100,234 @@
 
   <div class="container">
     
-    <!-- ==================== TAB TỔNG QUAN ==================== -->
-    <div id="tabOverview" style="display: flex; flex-direction: column; gap: 16px;">
+    <!-- ==================== TAB 1: DÒNG TIỀN & QUỸ LIÊN THÔNG ==================== -->
+    <div id="tabOverview" style="display: flex; flex-direction: column; gap: 14px;">
       
-      <!-- SỔ TIẾT KIỆM NỀN TẢNG BẢO VỆ 320M -->
-      <div class="card card-banner">
+      <!-- 1. BẢNG DÒNG TIỀN VÀO (IN) - RA (OUT) - THẶNG DƯ THÁNG NÀY -->
+      <div class="card" style="border: 1.5px solid #cbd5e1;">
         <div style="display: flex; justify-content: space-between; align-items: center;">
-          <span class="badge" style="background: rgba(255,255,255,0.22); font-weight: 800;">🛡️ Tiết Kiệm Nền Tảng Bảo Vệ</span>
-          <span class="badge badge-green">Giữ nguyên</span>
+          <span class="badge badge-green">📊 Dòng Tiền Vận Hành Tháng Này</span>
+          <button class="btn btn-outline" style="padding: 4px 10px; font-size: 11px;" onclick="openModal('income')">+ Ghi khoản thu</button>
         </div>
-        <div style="font-size: 30px; font-weight: 900; margin: 10px 0 6px 0; letter-spacing: -0.03em;" id="txtProtectedSavings">320.000.000 ₫</div>
-        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; opacity: 0.95; font-weight: 500;">
-          <span>Khóa cứng độc lập</span>
-          <span>Dự kiến tiết kiệm mới: <b id="txtNewSavings" style="font-weight: 800;">+0 ₫</b></span>
+
+        <div class="flow-summary">
+          <div class="flow-box flow-in">
+            <span style="font-size: 11.5px; font-weight: 800; color: #047857;">📥 TỔNG TIỀN VÀO (IN)</span>
+            <span style="font-size: 19px; font-weight: 900; color: #065f46;" id="txtFlowIn">0 ₫</span>
+            <span style="font-size: 10.5px; color: #059669; line-height: 1.3;" id="txtFlowInDetail">Định kỳ + Thu phụ</span>
+          </div>
+
+          <div class="flow-box flow-out">
+            <span style="font-size: 11.5px; font-weight: 800; color: #b91c1c;">📤 TIỀN RA THÁNG (OUT)</span>
+            <span style="font-size: 19px; font-weight: 900; color: #991b1b;" id="txtFlowOut">0 ₫</span>
+            <span style="font-size: 10.5px; color: #e11d48; line-height: 1.3;" id="txtFlowOutDetail">Chi từ thu nhập tháng</span>
+          </div>
+
+          <div class="flow-net">
+            <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px;">
+              <div>
+                <span style="font-size: 11px; font-weight: 800; color: #065f46; text-transform: uppercase;">💰 Dư Tiết Kiệm Mới Tháng Này:</span>
+                <div style="font-size: 24px; font-weight: 900; color: #047857; margin-top: 2px;" id="txtNetSavings">0 ₫</div>
+              </div>
+              <button class="btn btn-emerald" style="font-size: 11px; padding: 8px 10px; white-space: nowrap;" onclick="topUpBabyFund()">
+                + Nạp bù Quỹ Bé
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chi tiết các khoản thu phụ / không cố định trong tháng -->
+        <div style="margin-top: 12px; padding-top: 10px; border-top: 1px dashed #cbd5e1; font-size: 12px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <span style="font-weight: 800; color: #0369a1;">✨ Thu nhập phụ / biến động thực nhận tháng này:</span>
+            <b style="color: #0284c7;" id="txtIrregularTotal">0 ₫</b>
+          </div>
+          <div id="listIrregularIncome" style="display: flex; flex-direction: column; gap: 4px;"></div>
         </div>
       </div>
 
-      <!-- QUỸ TIẾT KIỆM BÉ (BẢO HIỂM & CSVC ĐẦU NĂM) -->
-      <div class="card" style="background: #faf5ff; border-color: #e9d5ff;">
+      <!-- 2. HỆ THỐNG SỔ TIẾT KIỆM LIÊN THÔNG -->
+      <div class="card" style="background: linear-gradient(180deg, #0f172a 0%, #1e1b4b 100%); color: #fff; border: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span class="badge" style="background: rgba(255,255,255,0.18); color: #e2e8f0;">🏦 Tổng Sổ Tiết Kiệm Hiện Tại</span>
+          <span class="badge badge-green" id="badgeBaseStatus">Nền Tảng An Toàn</span>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: baseline; margin: 10px 0 6px 0;">
+          <div style="font-size: 30px; font-weight: 900; color: #38bdf8; letter-spacing: -0.03em;" id="txtTotalSavingsCurrent">0 ₫</div>
+          <div style="font-size: 11.5px; color: #94a3b8;">Sổ gốc: <b id="txtTotalSavingsInitial">0 ₫</b></div>
+        </div>
+
+        <div style="display: flex; height: 10px; border-radius: 99px; overflow: hidden; background: #334155; margin: 8px 0;">
+          <div id="barBaseLocked" style="width: 90%; background: #0ea5e9; transition: width 0.4s;"></div>
+          <div id="barBabySlice" style="width: 10%; background: #c084fc; transition: width 0.4s;"></div>
+        </div>
+
+        <div class="grid-2" style="margin-top: 10px;">
+          <div style="background: rgba(255,255,255,0.08); padding: 10px 12px; border-radius: 14px; border: 1px solid rgba(56,189,248,0.3);">
+            <span style="font-size: 10.5px; color: #7dd3fc; font-weight: 700; display: block;">🔒 NỀN TẢNG KHÓA CỨNG</span>
+            <b style="font-size: 16px; color: #fff; display: block; margin-top: 2px;" id="txtBaseLockedAmount">0 ₫</b>
+            <span style="font-size: 10px; color: #94a3b8;">Mức sàn bảo vệ tuyệt đối</span>
+          </div>
+
+          <div style="background: rgba(192,132,252,0.15); padding: 10px 12px; border-radius: 14px; border: 1px solid rgba(192,132,252,0.4);">
+            <span style="font-size: 10.5px; color: #e9d5ff; font-weight: 700; display: block;">👶 QUỸ BÉ TRÍCH RA (CÒN LẠI)</span>
+            <b style="font-size: 16px; color: #f3e8ff; display: block; margin-top: 2px;" id="txtBabySliceRemaining">0 ₫</b>
+            <span style="font-size: 10px; color: #d8b4fe;" id="txtBabySliceSub">Gốc 0₫ • Đã rút 0₫</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. CÁC KHOẢN RÚT TỪ QUỸ BÉ (BẢO HIỂM, PHÍ ĐẦU NĂM...) - TỰ ĐỘNG RENDER TỪ CẤU HÌNH -->
+      <div class="card" style="background: #faf5ff; border: 1.5px solid #e9d5ff;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-          <span class="badge badge-purple">👶 Quỹ Tiết Kiệm Riêng Của Bé</span>
-          <span style="font-size: 12px; color: #6b21a8; font-weight: 700;" id="txtBabySavingsSpent">Đã trích: 0 ₫</span>
+          <span class="badge badge-purple">👶 Chi Tiết Các Khoản Trích Quỹ Bé</span>
+          <span style="font-size: 12px; font-weight: 800; color: #7c3aed;" id="txtBabyDeductedTag">Đã trừ tháng này: -0 ₫</span>
         </div>
-        <div style="font-weight: 800; font-size: 15px; margin-bottom: 8px;">Chi Các Khoản Lớn & Định Kỳ Cho Con</div>
-        <div class="grid-2">
-          <div class="grid-item" style="background: #fff; border-color: #f3e8ff;">
-            <div style="font-weight: 700; color: #334155; font-size: 12px;">1. CSVC & Sự kiện Edison</div>
-            <div style="font-size: 16px; font-weight: 900; color: #0f172a; margin: 4px 0 8px 0;" id="txtSchoolOneTime">1.520.000 ₫</div>
-            <div id="btnAreaSchoolOneTime">
-              <button class="btn btn-purple" style="width: 100%; font-size: 11px; padding: 7px;" onclick="paySchoolOneTime()">Trích Quỹ Bé Đóng</button>
-            </div>
-          </div>
-          <div class="grid-item" style="background: #fff; border-color: #f3e8ff;">
-            <div style="font-weight: 700; color: #334155; font-size: 12px;">2. Bảo hiểm nhân thọ</div>
-            <div style="font-size: 16px; font-weight: 900; color: #6b21a8; margin: 4px 0 8px 0;" id="txtInsuranceAmount">Chưa nhập</div>
-            <div id="btnAreaInsurance">
-              <button class="btn btn-purple" style="width: 100%; font-size: 11px; padding: 7px;" onclick="payInsurance()">Trích Quỹ Bé Đóng</button>
-            </div>
-          </div>
-        </div>
+
+        <div id="gridBabyItems" class="grid-2"></div>
+
+        <div id="listBabyDeductions" style="margin-top: 10px; display: flex; flex-direction: column; gap: 5px; font-size: 12px;"></div>
       </div>
 
-      <!-- PHỄU 1: GÓI SINH HOẠT 11 TRIỆU -->
+      <!-- 4. PHỄU 1: GÓI SINH HOẠT CHUNG -->
       <div class="card">
         <div style="display: flex; justify-content: space-between; align-items: center;">
           <span class="badge badge-amber">Phễu 1: Quỹ Sinh Hoạt Chung</span>
-          <span style="font-size: 12px; color: #64748b; font-weight: 600;" id="txtLivingBudgetHeader">Hạn mức: 11.000.000 ₫</span>
+          <span style="font-size: 12px; color: #64748b; font-weight: 600;" id="txtLivingBudgetHeader">Hạn mức: 0 ₫</span>
         </div>
         <div style="display: flex; justify-content: space-between; align-items: baseline; margin-top: 10px;">
-          <div style="font-size: 28px; font-weight: 900; color: #059669; letter-spacing: -0.02em;" id="txtLivingRemaining">11.000.000 ₫</div>
-          <div style="font-size: 13px; color: #64748b;">Đã tiêu: <b id="txtLivingSpent" style="color: #0f172a; font-weight: 800;">0 ₫</b></div>
+          <div>
+            <span style="font-size: 11px; color: #047857; font-weight: 700; text-transform: uppercase;">Còn lại trong gói:</span>
+            <div style="font-size: 28px; font-weight: 900; color: #059669; letter-spacing: -0.02em;" id="txtLivingRemaining">0 ₫</div>
+          </div>
+          <div style="font-size: 13px; color: #64748b; text-align: right;">
+            <div>Đã tiêu: <b id="txtLivingSpent" style="color: #0f172a; font-weight: 800;">0 ₫</b></div>
+          </div>
         </div>
         <div class="progress-bar">
           <div class="progress-fill" id="barLiving" style="width: 0%; background: #059669;"></div>
         </div>
         
-        <div style="font-size: 13px; font-weight: 800; color: #334155; margin: 12px 0 8px 0;">Chi tiết từng nhóm trong gói sinh hoạt:</div>
+        <div style="font-size: 13px; font-weight: 800; color: #334155; margin: 12px 0 8px 0;">Phân rã các nhóm con sinh hoạt:</div>
         <div id="listBreakdown" style="display: flex; flex-direction: column; gap: 8px;"></div>
       </div>
 
-      <!-- PHỄU 2: TIỀN HỌC THƯỜNG THÁNG EDISON -->
+      <!-- 5. PHỄU 2: CÁC KHOẢN CHI CỐ ĐỊNH HÀNG THÁNG TỪ THU NHẬP (TIỀN TRƯỜNG, V.V.) -->
       <div class="card">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-          <span class="badge badge-blue">Phễu 2: Học Phí Thường Tháng Của Bé</span>
-          <span style="font-size: 17px; font-weight: 900; color: #1e40af;" id="txtSchoolMonthly">4.650.000 ₫</span>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <span class="badge badge-blue">Phễu 2: Chi Cố Định Tháng Từ Thu Nhập</span>
+          <span style="font-size: 14px; font-weight: 900; color: #1e40af;" id="txtFixedMonthlyTotal">0 ₫</span>
         </div>
-        <div style="font-size: 12px; color: #64748b; margin-top: 5px; line-height: 1.4;" id="txtSchoolDetailDesc">
-          Gồm: Học phí + Tiền ăn + Học liệu & điều hòa. Trích từ Thu Nhập Tháng.
-        </div>
-        <div style="margin-top: 12px;" id="btnAreaSchoolMonthly">
-          <button class="btn btn-blue" style="width: 100%; font-size: 12.5px; padding: 10px;" onclick="paySchoolMonthly()">Xác Nhận Đã Đóng Học Phí Tháng</button>
-        </div>
+        <div id="listFixedMonthlyItems" style="display: flex; flex-direction: column; gap: 10px;"></div>
       </div>
 
       <!-- THẺ TÍN DỤNG -->
       <div class="card" style="display: flex; justify-content: space-between; align-items: center;">
         <div>
           <div style="font-weight: 800; font-size: 14px;">💳 Đã quẹt thẻ tín dụng tháng này</div>
-          <div style="font-size: 11px; color: #64748b; margin-top: 1px;">Thanh toán sao kê ngày 20</div>
+          <div style="font-size: 11px; color: #64748b; margin-top: 1px;">Thanh toán sao kê định kỳ</div>
         </div>
         <div style="font-size: 17px; font-weight: 900; color: #e11d48;" id="txtCreditSpent">0 ₫</div>
       </div>
 
     </div>
 
-    <!-- ==================== TAB LỊCH SỬ ==================== -->
+    <!-- ==================== TAB 2: LỊCH SỬ GIAO DỊCH ==================== -->
     <div id="tabTransactions" style="display: none; flex-direction: column; gap: 12px;">
       <div class="card" style="padding: 12px;">
-        <input type="text" id="inputSearch" placeholder="🔍 Tìm tên món chi tiêu (thịt, sữa, điện...)..." oninput="renderTransactions()" />
+        <input type="text" id="inputSearch" placeholder="🔍 Tìm tên giao dịch..." oninput="renderTransactions()" />
       </div>
       <div class="card">
-        <div style="font-weight: 800; font-size: 15px; margin-bottom: 8px;">Lịch Sử Chi Tiêu Tháng Này</div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <div style="font-weight: 800; font-size: 15px;">Lịch Sử Thu – Chi Tháng Này</div>
+          <span style="font-size: 12px; color: #64748b;" id="txtTxCount">0 khoản</span>
+        </div>
         <div id="txContainer"></div>
       </div>
     </div>
 
-    <!-- ==================== TAB CÀI ĐẶT TOÀN DIỆN ==================== -->
+    <!-- ==================== TAB 3: CÀI ĐẶT TOÀN DIỆN (KHÔNG FIX CỨNG BẤT KỲ CON SỐ NÀO) ==================== -->
     <div id="tabSettings" style="display: none; flex-direction: column; gap: 14px;">
       
-      <!-- FORM CẤU HÌNH TẤT CẢ CÁC LOẠI TIỀN -->
       <div class="card">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-          <div style="font-weight: 800; font-size: 16px; color: #0f172a;">⚙️ Cài Đặt Tất Cả Các Khoản Tiền</div>
+          <div style="font-weight: 800; font-size: 16px; color: #0f172a;">⚙️ Tùy Biến Toàn Bộ Hệ Thống</div>
           <button class="btn btn-emerald" style="padding: 8px 16px; font-size: 12px;" onclick="saveAllSettings()">💾 Lưu Tất Cả</button>
         </div>
 
         <div style="display: flex; flex-direction: column; gap: 14px;">
           
-          <!-- 1. CÁC NGUỒN THU NHẬP DỰ KIẾN -->
-          <div class="section-title">1. Thu Nhập Tháng Quản Lý (Dự kiến để tính tiết kiệm)</div>
+          <!-- 1. SỔ TIẾT KIỆM LIÊN THÔNG -->
+          <div class="section-title">
+            <span>1. Sổ Tiết Kiệm Gốc & Phân Bổ Quỹ Bé</span>
+            <span class="badge badge-purple">Liên thông</span>
+          </div>
           <div class="grid-2">
             <div class="form-group">
-              <label class="form-label">Lương của bạn (VNĐ):</label>
-              <input type="number" id="cfgIncomeSalary" />
+              <label class="form-label">Tổng sổ tiết kiệm gốc (VNĐ):</label>
+              <input type="number" id="cfgTotalSavingsInitial" />
             </div>
             <div class="form-group">
-              <label class="form-label">Chồng chuyển (VNĐ):</label>
-              <input type="number" id="cfgIncomeHusband" />
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Tiền cho thuê phòng (VNĐ):</label>
-            <input type="number" id="cfgIncomeRent" />
-          </div>
-
-          <!-- 2. KHOẢN TIẾT KIỆM NỀN & BẢO HIỂM -->
-          <div class="section-title">2. Khoản Tiết Kiệm Nền & Bảo Hiểm</div>
-          <div class="grid-2">
-            <div class="form-group">
-              <label class="form-label">Sổ tiết kiệm nền bảo vệ (VNĐ):</label>
-              <input type="number" id="cfgProtected" />
-            </div>
-            <div class="form-group">
-              <label class="form-label">Bảo hiểm nhân thọ định kỳ (VNĐ):</label>
-              <input type="number" id="cfgInsurance" />
+              <label class="form-label" style="color: #7c3aed;">Phần trích cho Quỹ Bé (VNĐ):</label>
+              <input type="number" id="cfgBabyFundAllocated" style="border-color: #c084fc;" />
             </div>
           </div>
 
-          <!-- 3. TIỀN TRƯỜNG EDISON REGGIO -->
-          <div class="section-title">3. Tiền Trường Mầm Non Edison Reggio</div>
-          <div class="grid-2">
-            <div class="form-group">
-              <label class="form-label">Học phí tháng chuẩn (VNĐ):</label>
-              <input type="number" id="cfgSchoolTuition" />
-            </div>
-            <div class="form-group">
-              <label class="form-label">Số ngày ăn trong tháng:</label>
-              <input type="number" id="cfgSchoolMealDays" />
-            </div>
+          <!-- 2. DANH SÁCH THU NHẬP CỐ ĐỊNH HÀNG THÁNG (TỰ THÊM/SỬA/XÓA) -->
+          <div class="section-title">
+            <span>2. Các Nguồn Thu Nhập Cố Định Tháng</span>
+            <span class="badge badge-green">Dòng tiền vào</span>
           </div>
-          <div class="grid-2">
-            <div class="form-group">
-              <label class="form-label">Tiền ăn 1 ngày (VNĐ):</label>
-              <input type="number" id="cfgSchoolMealRate" />
-            </div>
-            <div class="form-group">
-              <label class="form-label">Học liệu & điều hòa (VNĐ):</label>
-              <input type="number" id="cfgSchoolOtherMonthly" />
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="form-label">CSVC & sự kiện đầu năm (Rút quỹ bé):</label>
-            <input type="number" id="cfgOneTime" />
-          </div>
+          <div id="settingsFixedIncomeList" style="display: flex; flex-direction: column; gap: 8px;"></div>
+          <button type="button" class="btn btn-outline" style="font-size: 12px; padding: 8px;" onclick="addFixedIncomeItem()">+ Thêm nguồn thu cố định</button>
 
-          <!-- 4. GÓI CHI TIÊU SINH HOẠT 11 TRIỆU & CÁC NHÓM CON -->
-          <div class="section-title">4. Gói Sinh Hoạt Chung & Phân Bổ Nhóm Con</div>
+          <!-- 3. DANH MỤC THU KHÔNG CỐ ĐỊNH (CASHBACK, THANH LÝ, LÃI TK...) -->
+          <div class="section-title">
+            <span>3. Loại Thu Nhập Phụ / Biến Động</span>
+            <span class="badge badge-sky">Tùy biến</span>
+          </div>
+          <div id="settingsIrregularList" style="display: flex; flex-direction: column; gap: 8px;"></div>
+          <button type="button" class="btn btn-outline" style="font-size: 12px; padding: 8px;" onclick="addIrregularPreset()">+ Thêm loại thu phụ mới</button>
+
+          <!-- 4. CÁC KHOẢN TRÍCH TỪ QUỸ BÉ (BẢO HIỂM, PHÍ ĐẦU NĂM...) -->
+          <div class="section-title">
+            <span>4. Các Khoản Trích Từ Quỹ Bé (Bảo Hiểm, CSVC...)</span>
+            <span class="badge badge-purple">Trích Quỹ Bé</span>
+          </div>
+          <div id="settingsBabyItemsList" style="display: flex; flex-direction: column; gap: 8px;"></div>
+          <button type="button" class="btn btn-outline" style="font-size: 12px; padding: 8px;" onclick="addBabyItem()">+ Thêm khoản trích từ Quỹ Bé</button>
+
+          <!-- 5. CÁC KHOẢN CHI CỐ ĐỊNH THÁNG TỪ THU NHẬP (TRƯỜNG HỌC...) -->
+          <div class="section-title">
+            <span>5. Chi Cố Định Tháng Từ Thu Nhập (Trường Học...)</span>
+            <span class="badge badge-blue">Phễu 2</span>
+          </div>
+          <div id="settingsFixedMonthlyList" style="display: flex; flex-direction: column; gap: 8px;"></div>
+          <button type="button" class="btn btn-outline" style="font-size: 12px; padding: 8px;" onclick="addFixedMonthlyItem()">+ Thêm khoản chi cố định tháng</button>
+
+          <!-- 6. GÓI SINH HOẠT CHUNG & NHÓM CON -->
+          <div class="section-title">
+            <span>6. Gói Sinh Hoạt Chung & Các Nhóm Con</span>
+            <span class="badge badge-amber">Phễu 1</span>
+          </div>
           <div class="form-group">
-            <label class="form-label" style="color: #059669; font-size: 12.5px;">Tổng hạn mức Gói Sinh Hoạt (VNĐ):</label>
+            <label class="form-label" style="color: #059669; font-size: 13px;">Tổng ngân sách gói sinh hoạt (VNĐ):</label>
             <input type="number" id="cfgLiving" style="font-weight: 800; border-color: #059669;" />
           </div>
 
-          <div style="font-size: 12px; font-weight: 700; color: #64748b; margin-top: 2px;">Số tiền cho từng nhóm con:</div>
           <div id="settingsBreakdownContainer" style="display: flex; flex-direction: column; gap: 8px;"></div>
+          <button type="button" class="btn btn-outline" style="font-size: 12px; padding: 8px;" onclick="addBreakdownPreset()">+ Thêm nhóm con sinh hoạt</button>
 
-          <button class="btn btn-emerald" style="padding: 12px; font-size: 14px; margin-top: 8px;" onclick="saveAllSettings()">💾 Lưu Toàn Bộ Cài Đặt</button>
+          <button type="button" class="btn btn-emerald" style="padding: 13px; font-size: 14px; margin-top: 8px;" onclick="saveAllSettings()">💾 Lưu Toàn Bộ Cài Đặt</button>
 
         </div>
       </div>
 
       <!-- KẾT NỐI CLOUD SUPABASE -->
       <div class="card" style="background: #f0fdf4; border-color: #bbf7d0;">
-        <div style="font-weight: 800; font-size: 15px; color: #166534; margin-bottom: 6px;">⚡ Kết Nối Supabase (Đồng Bộ Đám Mây)</div>
-        <p style="font-size: 12px; color: #15803d; margin-bottom: 12px; line-height: 1.4;">Lưu dữ liệu trên đám mây để 2 vợ chồng cùng mở trên 2 máy đều cập nhật tức thì.</p>
+        <div style="font-weight: 800; font-size: 15px; color: #166534; margin-bottom: 6px;">⚡ Kết Nối Supabase (Đồng Bộ Cloud)</div>
+        <p style="font-size: 12px; color: #15803d; margin-bottom: 12px; line-height: 1.4;">Lưu dữ liệu trên đám mây để 2 vợ chồng cùng mở trên 2 máy đều xem và cập nhật tức thì.</p>
         <div style="display: flex; flex-direction: column; gap: 8px; font-size: 12px;">
           <div>
             <label style="font-weight: 700; color: #166534;">Project URL:</label>
@@ -293,7 +358,7 @@
       <span style="font-size: 19px;">📊</span>
       <span>Dòng Tiền</span>
     </button>
-    <button class="fab-btn" onclick="openModal()">+</button>
+    <button class="fab-btn" onclick="openModal('expense')">+</button>
     <button class="nav-btn" id="btnNavTx" onclick="switchTab('transactions')">
       <span style="font-size: 19px;">📝</span>
       <span>Lịch Sử</span>
@@ -304,80 +369,110 @@
     </button>
   </nav>
 
-  <!-- MODAL THÊM KHOẢN CHI -->
+  <!-- MODAL THÊM GIAO DỊCH -->
   <div class="modal-overlay" id="modalAdd">
     <div class="modal-box">
       <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f1f5f9; padding-bottom: 8px;">
-        <div style="font-weight: 800; font-size: 16px;">Ghi Khoản Chi Mới</div>
+        <div style="font-weight: 800; font-size: 16px;">Ghi Nhận Giao Dịch Mới</div>
         <button onclick="closeModal()" style="border: none; background: none; font-size: 20px; color: #94a3b8; cursor: pointer;">✕</button>
       </div>
-      <div>
-        <label style="font-size: 12px; font-weight: 700; color: #64748b; margin-bottom: 4px; display: block;">Tên khoản chi:</label>
-        <input type="text" id="addTitle" placeholder="VD: Mua rau, thịt bò, bỉm sữa..." />
+
+      <div class="grid-2" style="background: #f1f5f9; padding: 4px; border-radius: 14px;">
+        <button type="button" id="btnTypeExpense" class="btn btn-emerald" style="padding: 8px;" onclick="setModalType('expense')">📤 Khoản Chi</button>
+        <button type="button" id="btnTypeIncome" class="btn btn-outline" style="padding: 8px; border: none;" onclick="setModalType('income')">📥 Khoản Thu</button>
       </div>
+
+      <div>
+        <label style="font-size: 12px; font-weight: 700; color: #64748b; margin-bottom: 4px; display: block;">Nội dung:</label>
+        <input type="text" id="addTitle" placeholder="VD: Mua thịt, Cashback thẻ, Bán đồ thanh lý..." />
+      </div>
+
       <div>
         <label style="font-size: 12px; font-weight: 700; color: #64748b; margin-bottom: 4px; display: block;">Số tiền (VNĐ):</label>
-        <input type="number" id="addAmount" placeholder="VD: 50000" />
+        <input type="number" id="addAmount" placeholder="VD: 500000" />
       </div>
-      <div>
-        <label style="font-size: 12px; font-weight: 700; color: #64748b; margin-bottom: 4px; display: block;">Nguồn tiền trích ra:</label>
-        <select id="addSource">
-          <option value="monthly_income">💵 Từ Thu Nhập Tháng (Gói 11M hoặc tiền học)</option>
-          <option value="baby_savings">👶 Rút từ Tiết Kiệm Của Bé (Bảo hiểm & CSVC đầu năm)</option>
-        </select>
-      </div>
-      <div class="grid-2">
+
+      <div id="areaExpenseFields" style="display: flex; flex-direction: column; gap: 12px;">
         <div>
-          <label style="font-size: 12px; font-weight: 700; color: #64748b; margin-bottom: 4px; display: block;">Nhóm:</label>
-          <select id="addCat">
-            <option value="Ăn uống & Đi chợ">Ăn uống & Đi chợ</option>
-            <option value="Em bé & Con cái">Em bé & Con cái</option>
-            <option value="Điện nước & Dịch vụ">Điện nước & Dịch vụ</option>
-            <option value="Chi tiêu cá nhân">Chi tiêu cá nhân</option>
-            <option value="Dự phòng phát sinh">Dự phòng phát sinh</option>
+          <label style="font-size: 12px; font-weight: 700; color: #0f172a; margin-bottom: 4px; display: block;">Nguồn tiền trích ra:</label>
+          <select id="addSource">
+            <option value="monthly_income">💵 Từ Thu Nhập Tháng (Gói sinh hoạt hoặc Chi cố định)</option>
+            <option value="baby_savings">👶 Rút từ Quỹ Bé (Bảo hiểm & Khoản phát sinh của bé)</option>
           </select>
         </div>
-        <div>
-          <label style="font-size: 12px; font-weight: 700; color: #64748b; margin-bottom: 4px; display: block;">Hình thức:</label>
-          <select id="addMethod">
-            <option value="Chuyển khoản">Chuyển khoản</option>
-            <option value="Tiền mặt">Tiền mặt</option>
-            <option value="Thẻ tín dụng">Thẻ tín dụng</option>
-          </select>
+        <div class="grid-2">
+          <div>
+            <label style="font-size: 12px; font-weight: 700; color: #64748b; margin-bottom: 4px; display: block;">Nhóm chi:</label>
+            <select id="addCat"></select>
+          </div>
+          <div>
+            <label style="font-size: 12px; font-weight: 700; color: #64748b; margin-bottom: 4px; display: block;">Hình thức:</label>
+            <select id="addMethod">
+              <option value="Chuyển khoản">Chuyển khoản</option>
+              <option value="Tiền mặt">Tiền mặt</option>
+              <option value="Thẻ tín dụng">Thẻ tín dụng</option>
+            </select>
+          </div>
         </div>
       </div>
-      <button class="btn btn-emerald" style="padding: 12px; font-size: 14px; margin-top: 6px;" onclick="saveTx()">Lưu Khoản Chi</button>
+
+      <div id="areaIncomeFields" style="display: none; flex-direction: column; gap: 12px;">
+        <div>
+          <label style="font-size: 12px; font-weight: 700; color: #0369a1; margin-bottom: 4px; display: block;">Loại nguồn thu:</label>
+          <select id="addIncomeCat"></select>
+        </div>
+      </div>
+
+      <button class="btn btn-emerald" style="padding: 12px; font-size: 14px; margin-top: 4px;" onclick="saveTx()">Lưu Giao Dịch</button>
     </div>
   </div>
 
   <script>
-    const LOCAL_KEY = 'GIA_DINH_VANILLA_FULLCFG_V2';
+    const LOCAL_KEY = 'GIA_DINH_DYNAMIC_CFG_V5';
     let supaClient = null;
+    let currentModalType = 'expense';
 
+    // DỮ LIỆU KHỞI TẠO ĐỘNG (HOÀN TOÀN CÓ THỂ THÊM/SỬA/XÓA MỌI THỨ)
     let defaultData = {
-      // 1. Tiết kiệm & Thu nhập
-      protectedSavings: 320000000,
-      incomeSalary: 12500000,
-      incomeHusband: 10000000,
-      incomeRent: 2500000,
-      
-      // 2. Bảo hiểm & Sinh hoạt 11M
-      insuranceQuarterly: 0,
-      livingBudget: 11000000,
-      breakdown: [
-        { name: 'Ăn uống & Đi chợ', limit: 4500000 },
-        { name: 'Em bé & Con cái', limit: 2500000 },
-        { name: 'Điện nước & Dịch vụ', limit: 2000000 },
-        { name: 'Chi tiêu cá nhân', limit: 1000000 },
-        { name: 'Dự phòng phát sinh', limit: 1000000 }
+      totalSavingsInitial: 320000000,
+      babyFundAllocated: 25000000,
+      babyFundExtraTopUp: 0,
+
+      // 1. Mảng thu nhập cố định (Tự do thêm/sửa/xóa)
+      fixedIncomes: [
+        { id: 'inc1', name: 'Lương của tôi', amount: 12500000 },
+        { id: 'inc2', name: 'Chồng chuyển quản lý', amount: 10000000 },
+        { id: 'inc3', name: 'Cho thuê phòng', amount: 2500000 }
       ],
 
-      // 3. Tiền trường Edison Reggio
-      schoolTuition: 3150000,
-      schoolMealDays: 26,
-      schoolMealRate: 50000,
-      schoolOtherMonthly: 200000,
-      schoolOneTime: 1520000,
+      // 2. Danh mục thu nhập phụ / không cố định
+      irregularPresets: [
+        { id: 'irr1', name: 'Cashback thẻ tín dụng' },
+        { id: 'irr2', name: 'Thanh lý đồ bán được' },
+        { id: 'irr3', name: 'Lãi tiết kiệm định kỳ' },
+        { id: 'irr4', name: 'Thưởng / Tiền tặng bé' }
+      ],
+
+      // 3. Mảng các khoản trích từ Quỹ Bé (Tự do thêm/sửa/xóa)
+      babyFundItems: [
+        { id: 'baby_item_1', name: 'CSVC & Sự kiện đầu năm Edison', amount: 1520000 },
+        { id: 'baby_item_2', name: 'Bảo hiểm nhân thọ (Định kỳ)', amount: 0 }
+      ],
+
+      // 4. Mảng các khoản chi cố định hàng tháng từ Thu nhập (Tự do thêm/sửa/xóa)
+      fixedMonthlyItems: [
+        { id: 'fix_m_1', name: 'Học phí & Tiền ăn Edison Reggio', amount: 4650000, desc: 'Học phí 3.15M + Ăn 26 ngày (1.3M) + Học liệu/ĐH (200k)' }
+      ],
+
+      // 5. Gói sinh hoạt & các nhóm con (Tự do thêm/sửa/xóa)
+      livingBudget: 11000000,
+      breakdown: [
+        { id: 'b1', name: 'Ăn uống & Đi chợ', limit: 4500000 },
+        { id: 'b2', name: 'Em bé & Con cái', limit: 2500000 },
+        { id: 'b3', name: 'Điện nước & Dịch vụ', limit: 2000000 },
+        { id: 'b4', name: 'Chi tiêu cá nhân', limit: 1000000 },
+        { id: 'b5', name: 'Dự phòng phát sinh', limit: 1000000 }
+      ],
 
       transactions: []
     };
@@ -395,9 +490,7 @@
           badge.className = 'status-badge status-online';
           badge.innerText = 'Đã kết nối Cloud';
           syncFromSupabase();
-        } catch (e) {
-          console.error("Lỗi Supabase:", e);
-        }
+        } catch (e) { console.error("Lỗi Supabase:", e); }
       }
     }
 
@@ -410,6 +503,7 @@
             id: Number(t.id),
             title: t.title,
             amount: Number(t.amount),
+            type: t.bucket === 'income_irregular' ? 'income' : 'expense',
             source: t.source,
             bucket: t.bucket,
             cat: t.cat,
@@ -418,9 +512,7 @@
           }));
           saveLocal();
         }
-      } catch (err) {
-        console.error("Lỗi đồng bộ:", err);
-      }
+      } catch (err) { console.error("Lỗi đồng bộ:", err); }
     }
 
     function saveSupabaseConfig() {
@@ -439,13 +531,10 @@
         if (saved) {
           appData = Object.assign({}, defaultData, JSON.parse(saved));
         } else {
-          // Thử nạp từ các bản cũ nếu có
-          const old = localStorage.getItem('GIA_DINH_VANILLA_SUPA_V1') || localStorage.getItem('GIA_DINH_VANILLA_PRO_V1');
+          const old = localStorage.getItem('GIA_DINH_LINKED_SAVINGS_V4');
           if (old) {
             const p = JSON.parse(old);
             if (p.transactions) appData.transactions = p.transactions;
-            if (p.protectedSavings) appData.protectedSavings = p.protectedSavings;
-            if (p.livingBudget) appData.livingBudget = p.livingBudget;
           }
         }
       } catch (e) { appData = defaultData; }
@@ -467,13 +556,6 @@
       render();
     }
 
-    function getSchoolMonthlyAmount() {
-      const tuition = Number(appData.schoolTuition) || 0;
-      const meal = (Number(appData.schoolMealDays) || 0) * (Number(appData.schoolMealRate) || 0);
-      const other = Number(appData.schoolOtherMonthly) || 0;
-      return tuition + meal + other;
-    }
-
     function switchTab(tab) {
       document.getElementById('tabOverview').style.display = tab === 'overview' ? 'flex' : 'none';
       document.getElementById('tabTransactions').style.display = tab === 'transactions' ? 'flex' : 'none';
@@ -483,35 +565,77 @@
       document.getElementById('btnNavTx').classList.toggle('active', tab === 'transactions');
       document.getElementById('btnNavSettings').classList.toggle('active', tab === 'settings');
 
-      if (tab === 'settings') {
-        renderSettingsForm();
-      }
+      if (tab === 'settings') renderSettingsForm();
     }
 
+    // ==================== RENDER FORM CÀI ĐẶT ĐỘNG ====================
     function renderSettingsForm() {
-      document.getElementById('cfgIncomeSalary').value = appData.incomeSalary || 12500000;
-      document.getElementById('cfgIncomeHusband').value = appData.incomeHusband || 10000000;
-      document.getElementById('cfgIncomeRent').value = appData.incomeRent || 2500000;
+      document.getElementById('cfgTotalSavingsInitial').value = appData.totalSavingsInitial || 0;
+      document.getElementById('cfgBabyFundAllocated').value = appData.babyFundAllocated || 0;
+      document.getElementById('cfgLiving').value = appData.livingBudget || 0;
 
-      document.getElementById('cfgProtected').value = appData.protectedSavings || 320000000;
-      document.getElementById('cfgInsurance').value = appData.insuranceQuarterly || 0;
+      // 1. Thu nhập cố định
+      let fIncHtml = '';
+      (appData.fixedIncomes || []).forEach((item, idx) => {
+        fIncHtml += `
+          <div class="row-item">
+            <input type="text" id="cfgFIncName_${idx}" value="${item.name}" style="flex: 1; font-size: 12.5px;" placeholder="Tên nguồn thu..." />
+            <input type="number" id="cfgFIncAmt_${idx}" value="${item.amount}" style="width: 130px; font-size: 12.5px; text-align: right;" placeholder="Số tiền" />
+            <button type="button" class="btn-danger-ghost" onclick="removeArrayItem('fixedIncomes', ${idx})">✕</button>
+          </div>
+        `;
+      });
+      document.getElementById('settingsFixedIncomeList').innerHTML = fIncHtml;
 
-      document.getElementById('cfgSchoolTuition').value = appData.schoolTuition || 3150000;
-      document.getElementById('cfgSchoolMealDays').value = appData.schoolMealDays || 26;
-      document.getElementById('cfgSchoolMealRate').value = appData.schoolMealRate || 50000;
-      document.getElementById('cfgSchoolOtherMonthly').value = appData.schoolOtherMonthly || 200000;
-      document.getElementById('cfgOneTime').value = appData.schoolOneTime || 1520000;
+      // 2. Loại thu không cố định
+      let irrHtml = '';
+      (appData.irregularPresets || []).forEach((item, idx) => {
+        irrHtml += `
+          <div class="row-item">
+            <input type="text" id="cfgIrrName_${idx}" value="${item.name}" style="flex: 1; font-size: 12.5px;" placeholder="Tên loại thu..." />
+            <button type="button" class="btn-danger-ghost" onclick="removeArrayItem('irregularPresets', ${idx})">✕</button>
+          </div>
+        `;
+      });
+      document.getElementById('settingsIrregularList').innerHTML = irrHtml;
 
-      document.getElementById('cfgLiving').value = appData.livingBudget || 11000000;
+      // 3. Các khoản trích Quỹ Bé
+      let babyHtml = '';
+      (appData.babyFundItems || []).forEach((item, idx) => {
+        babyHtml += `
+          <div class="row-item">
+            <input type="text" id="cfgBabyName_${idx}" value="${item.name}" style="flex: 1; font-size: 12.5px;" placeholder="Tên khoản..." />
+            <input type="number" id="cfgBabyAmt_${idx}" value="${item.amount}" style="width: 130px; font-size: 12.5px; text-align: right;" placeholder="Số tiền" />
+            <button type="button" class="btn-danger-ghost" onclick="removeArrayItem('babyFundItems', ${idx})">✕</button>
+          </div>
+        `;
+      });
+      document.getElementById('settingsBabyItemsList').innerHTML = babyHtml;
 
-      // Danh sách 5 nhóm con
+      // 4. Các khoản chi cố định hàng tháng từ Thu nhập
+      let fixMHtml = '';
+      (appData.fixedMonthlyItems || []).forEach((item, idx) => {
+        fixMHtml += `
+          <div style="background: #f8fafc; padding: 10px; border-radius: 12px; border: 1px solid #e2e8f0; display: flex; flex-direction: column; gap: 6px;">
+            <div style="display: flex; gap: 6px; align-items: center;">
+              <input type="text" id="cfgFixMName_${idx}" value="${item.name}" style="flex: 1; font-size: 12.5px;" placeholder="Tên khoản chi..." />
+              <input type="number" id="cfgFixMAmt_${idx}" value="${item.amount}" style="width: 130px; font-size: 12.5px; text-align: right;" placeholder="Số tiền" />
+              <button type="button" class="btn-danger-ghost" onclick="removeArrayItem('fixedMonthlyItems', ${idx})">✕</button>
+            </div>
+            <input type="text" id="cfgFixMDesc_${idx}" value="${item.desc || ''}" style="font-size: 11.5px; color: #64748b;" placeholder="Ghi chú chi tiết cấu thành (tùy chọn)..." />
+          </div>
+        `;
+      });
+      document.getElementById('settingsFixedMonthlyList').innerHTML = fixMHtml;
+
+      // 5. Nhóm con gói sinh hoạt
       let bHtml = '';
-      (appData.breakdown || []).forEach((b, index) => {
+      (appData.breakdown || []).forEach((b, idx) => {
         bHtml += `
-          <div style="display: flex; gap: 8px; align-items: center;">
-            <input type="text" id="cfgBreakdownName_${index}" value="${b.name}" style="flex: 1; font-size: 12.5px;" />
-            <input type="number" id="cfgBreakdownLimit_${index}" value="${b.limit}" style="width: 140px; font-weight: 700; font-size: 12.5px; text-align: right;" />
-            <span style="font-size: 12px; color: #64748b;">₫</span>
+          <div class="row-item">
+            <input type="text" id="cfgBreakdownName_${idx}" value="${b.name}" style="flex: 1; font-size: 12.5px;" />
+            <input type="number" id="cfgBreakdownLimit_${idx}" value="${b.limit}" style="width: 130px; font-weight: 700; font-size: 12.5px; text-align: right;" />
+            <button type="button" class="btn-danger-ghost" onclick="removeArrayItem('breakdown', ${idx})">✕</button>
           </div>
         `;
       });
@@ -521,62 +645,216 @@
       document.getElementById('cfgSupaKey').value = localStorage.getItem('SUPABASE_KEY') || '';
     }
 
-    function saveAllSettings() {
-      appData.incomeSalary = Number(document.getElementById('cfgIncomeSalary').value) || 0;
-      appData.incomeHusband = Number(document.getElementById('cfgIncomeHusband').value) || 0;
-      appData.incomeRent = Number(document.getElementById('cfgIncomeRent').value) || 0;
-
-      appData.protectedSavings = Number(document.getElementById('cfgProtected').value) || 0;
-      appData.insuranceQuarterly = Number(document.getElementById('cfgInsurance').value) || 0;
-
-      appData.schoolTuition = Number(document.getElementById('cfgSchoolTuition').value) || 0;
-      appData.schoolMealDays = Number(document.getElementById('cfgSchoolMealDays').value) || 0;
-      appData.schoolMealRate = Number(document.getElementById('cfgSchoolMealRate').value) || 0;
-      appData.schoolOtherMonthly = Number(document.getElementById('cfgSchoolOtherMonthly').value) || 0;
-      appData.schoolOneTime = Number(document.getElementById('cfgOneTime').value) || 0;
-
+    // Các hàm thêm / xóa dòng cấu hình
+    function syncCurrentInputsBeforeMutate() {
+      appData.totalSavingsInitial = Number(document.getElementById('cfgTotalSavingsInitial').value) || 0;
+      appData.babyFundAllocated = Number(document.getElementById('cfgBabyFundAllocated').value) || 0;
       appData.livingBudget = Number(document.getElementById('cfgLiving').value) || 0;
 
-      // Lưu các nhóm con
-      let newBreakdown = [];
-      (appData.breakdown || []).forEach((b, index) => {
-        const nameEl = document.getElementById(`cfgBreakdownName_${index}`);
-        const limitEl = document.getElementById(`cfgBreakdownLimit_${index}`);
-        if (nameEl && limitEl) {
-          newBreakdown.push({
-            name: nameEl.value.trim() || b.name,
-            limit: Number(limitEl.value) || 0
-          });
-        }
+      (appData.fixedIncomes || []).forEach((it, idx) => {
+        const n = document.getElementById(`cfgFIncName_${idx}`);
+        const a = document.getElementById(`cfgFIncAmt_${idx}`);
+        if (n && a) { it.name = n.value; it.amount = Number(a.value) || 0; }
       });
-      appData.breakdown = newBreakdown;
+      (appData.irregularPresets || []).forEach((it, idx) => {
+        const n = document.getElementById(`cfgIrrName_${idx}`);
+        if (n) it.name = n.value;
+      });
+      (appData.babyFundItems || []).forEach((it, idx) => {
+        const n = document.getElementById(`cfgBabyName_${idx}`);
+        const a = document.getElementById(`cfgBabyAmt_${idx}`);
+        if (n && a) { it.name = n.value; it.amount = Number(a.value) || 0; }
+      });
+      (appData.fixedMonthlyItems || []).forEach((it, idx) => {
+        const n = document.getElementById(`cfgFixMName_${idx}`);
+        const a = document.getElementById(`cfgFixMAmt_${idx}`);
+        const d = document.getElementById(`cfgFixMDesc_${idx}`);
+        if (n && a) { it.name = n.value; it.amount = Number(a.value) || 0; it.desc = d ? d.value : ''; }
+      });
+      (appData.breakdown || []).forEach((it, idx) => {
+        const n = document.getElementById(`cfgBreakdownName_${idx}`);
+        const l = document.getElementById(`cfgBreakdownLimit_${idx}`);
+        if (n && l) { it.name = n.value; it.limit = Number(l.value) || 0; }
+      });
+    }
 
+    function removeArrayItem(key, idx) {
+      syncCurrentInputsBeforeMutate();
+      appData[key].splice(idx, 1);
+      renderSettingsForm();
+    }
+
+    function addFixedIncomeItem() {
+      syncCurrentInputsBeforeMutate();
+      appData.fixedIncomes.push({ id: 'inc_' + Date.now(), name: 'Nguồn thu mới', amount: 0 });
+      renderSettingsForm();
+    }
+
+    function addIrregularPreset() {
+      syncCurrentInputsBeforeMutate();
+      appData.irregularPresets.push({ id: 'irr_' + Date.now(), name: 'Khoản thu phụ mới' });
+      renderSettingsForm();
+    }
+
+    function addBabyItem() {
+      syncCurrentInputsBeforeMutate();
+      appData.babyFundItems.push({ id: 'baby_' + Date.now(), name: 'Khoản chi của bé', amount: 0 });
+      renderSettingsForm();
+    }
+
+    function addFixedMonthlyItem() {
+      syncCurrentInputsBeforeMutate();
+      appData.fixedMonthlyItems.push({ id: 'fixm_' + Date.now(), name: 'Khoản cố định tháng', amount: 0, desc: '' });
+      renderSettingsForm();
+    }
+
+    function addBreakdownPreset() {
+      syncCurrentInputsBeforeMutate();
+      appData.breakdown.push({ id: 'b_' + Date.now(), name: 'Nhóm sinh hoạt mới', limit: 0 });
+      renderSettingsForm();
+    }
+
+    function saveAllSettings() {
+      syncCurrentInputsBeforeMutate();
       saveLocal();
-      alert('✅ Đã lưu toàn bộ các cài đặt thành công! Màn hình chính đã được cập nhật.');
+      alert('✅ Đã lưu toàn bộ cấu hình tùy biến thành công!');
       switchTab('overview');
     }
 
+    // ==================== RENDER TRANG CHÍNH ====================
     function render() {
       const txs = appData.transactions.filter(t => t.monthKey === currentMonth);
 
-      const livingTxs = txs.filter(t => t.source !== 'baby_savings' && t.bucket !== 'school_monthly');
-      const livingSpent = livingTxs.reduce((s, t) => s + t.amount, 0);
-      const livingRemaining = Math.max(0, appData.livingBudget - livingSpent);
+      // 1. DÒNG TIỀN VÀO (IN = Tổng thu cố định + Tổng thu không cố định thực nhận)
+      const fixedIncomeTotal = (appData.fixedIncomes || []).reduce((s, item) => s + (Number(item.amount) || 0), 0);
+      const irregularTxs = txs.filter(t => t.type === 'income');
+      const irregularTotal = irregularTxs.reduce((s, t) => s + (Number(t.amount) || 0), 0);
+      const totalIncomeIn = fixedIncomeTotal + irregularTotal;
 
-      document.getElementById('txtProtectedSavings').innerText = formatVND(appData.protectedSavings);
+      document.getElementById('txtFlowIn').innerText = formatVND(totalIncomeIn);
+      document.getElementById('txtFlowInDetail').innerText = `Cố định: ${formatVND(fixedIncomeTotal)} • Phụ: +${formatVND(irregularTotal)}`;
+      document.getElementById('txtIrregularTotal').innerText = `+${formatVND(irregularTotal)}`;
+
+      if (irregularTxs.length === 0) {
+        document.getElementById('listIrregularIncome').innerHTML = '<span style="color: #94a3b8; font-style: italic;">Chưa có khoản thu phụ nào tháng này. Bấm "+ Ghi khoản thu" ở góc trên để thêm.</span>';
+      } else {
+        let irrListHtml = '';
+        irregularTxs.forEach(t => {
+          irrListHtml += `
+            <div style="display: flex; justify-content: space-between; align-items: center; background: #f0f9ff; padding: 6px 10px; border-radius: 8px; border: 1px solid #bae6fd;">
+              <span>✨ <b>${t.cat}:</b> ${t.title}</span>
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <b style="color: #0284c7;">+${formatVND(t.amount)}</b>
+                <button onclick="deleteTx(${t.id})" style="border:none; background:none; color:#94a3b8; cursor:pointer;">✕</button>
+              </div>
+            </div>
+          `;
+        });
+        document.getElementById('listIrregularIncome').innerHTML = irrListHtml;
+      }
+
+      // 2. DÒNG TIỀN RA TỪ THU NHẬP THÁNG (OUT)
+      const monthlyOutTxs = txs.filter(t => t.type !== 'income' && t.source !== 'baby_savings');
+      const totalMonthlyOut = monthlyOutTxs.reduce((s, t) => s + (Number(t.amount) || 0), 0);
+      document.getElementById('txtFlowOut').innerText = formatVND(totalMonthlyOut);
+
+      // 3. THẶNG DƯ TIẾT KIỆM MỚI (NET)
+      const fixedMonthlyPlannedTotal = (appData.fixedMonthlyItems || []).reduce((s, item) => s + (Number(item.amount) || 0), 0);
+      const plannedOut = (Number(appData.livingBudget) || 0) + fixedMonthlyPlannedTotal;
+      const actualOrPlannedOut = totalMonthlyOut > 0 ? totalMonthlyOut : plannedOut;
+      const netSavings = Math.max(0, totalIncomeIn - actualOrPlannedOut);
+      document.getElementById('txtNetSavings').innerText = `+${formatVND(netSavings)}`;
+
+      // 4. SỔ TIẾT KIỆM LIÊN THÔNG
+      const totalInitial = Number(appData.totalSavingsInitial) || 0;
+      const babyAllocated = (Number(appData.babyFundAllocated) || 0) + (Number(appData.babyFundExtraTopUp) || 0);
+      const baseLocked = Math.max(0, totalInitial - (Number(appData.babyFundAllocated) || 0));
+
+      const allBabyTxs = appData.transactions.filter(t => t.type !== 'income' && t.source === 'baby_savings');
+      const totalBabyDeductedAllTime = allBabyTxs.reduce((s, t) => s + (Number(t.amount) || 0), 0);
+
+      const monthBabyTxs = txs.filter(t => t.type !== 'income' && t.source === 'baby_savings');
+      const monthBabyDeducted = monthBabyTxs.reduce((s, t) => s + (Number(t.amount) || 0), 0);
+
+      const babySliceRemaining = Math.max(0, babyAllocated - totalBabyDeductedAllTime);
+      const totalSavingsCurrent = Math.max(0, (totalInitial + (Number(appData.babyFundExtraTopUp) || 0)) - totalBabyDeductedAllTime);
+
+      document.getElementById('txtTotalSavingsCurrent').innerText = formatVND(totalSavingsCurrent);
+      document.getElementById('txtTotalSavingsInitial').innerText = formatVND(totalInitial);
+      document.getElementById('txtBaseLockedAmount').innerText = formatVND(baseLocked);
+      document.getElementById('txtBabySliceRemaining').innerText = formatVND(babySliceRemaining);
+      document.getElementById('txtBabySliceSub').innerText = `Gốc ${formatVND(babyAllocated)} • Đã rút ${formatVND(totalBabyDeductedAllTime)}`;
+      document.getElementById('txtBabyDeductedTag').innerText = `Đã trừ tháng này: -${formatVND(monthBabyDeducted)}`;
+
+      if (totalSavingsCurrent > 0) {
+        const basePct = Math.min(100, Math.round((baseLocked / totalSavingsCurrent) * 100));
+        const babyPct = Math.max(0, 100 - basePct);
+        document.getElementById('barBaseLocked').style.width = basePct + '%';
+        document.getElementById('barBabySlice').style.width = babyPct + '%';
+      }
+
+      const badgeBase = document.getElementById('badgeBaseStatus');
+      if (totalSavingsCurrent >= baseLocked) {
+        badgeBase.className = 'badge badge-green';
+        badgeBase.innerText = `Nền ${formatVND(baseLocked)} An Toàn`;
+      } else {
+        badgeBase.className = 'badge badge-rose';
+        badgeBase.innerText = '⚠️ Cảnh báo: Chạm mức nền!';
+      }
+
+      // Render các khoản trích Quỹ Bé (Động 100% theo cài đặt)
+      let babyGridHtml = '';
+      (appData.babyFundItems || []).forEach(item => {
+        const isPaid = txs.some(t => t.bucket === item.id);
+        babyGridHtml += `
+          <div class="grid-item" style="background: #fff; border-color: #e9d5ff;">
+            <div style="font-weight: 700; color: #334155; font-size: 12px;">${item.name}</div>
+            <div style="font-size: 16px; font-weight: 900; color: #6b21a8; margin: 4px 0 6px 0;">
+              ${item.amount > 0 ? formatVND(item.amount) : 'Tùy nhập'}
+            </div>
+            ${isPaid 
+              ? `<span class="badge badge-green" style="display: block; text-align: center; padding: 7px;">✓ Đã trích quỹ bé</span>`
+              : `<button class="btn btn-purple" style="width: 100%; font-size: 11.5px; padding: 7px;" onclick="payDynamicBabyItem('${item.id}')">Trích Quỹ Bé Đóng</button>`
+            }
+          </div>
+        `;
+      });
+      document.getElementById('gridBabyItems').innerHTML = babyGridHtml;
+
+      if (monthBabyTxs.length === 0) {
+        document.getElementById('listBabyDeductions').innerHTML = '<span style="color: #94a3b8; font-style: italic;">Tháng này chưa rút khoản nào từ Quỹ Bé.</span>';
+      } else {
+        let bListHtml = '';
+        monthBabyTxs.forEach(t => {
+          bListHtml += `
+            <div style="display: flex; justify-content: space-between; align-items: center; background: #fff; padding: 6px 10px; border-radius: 8px; border: 1px solid #e9d5ff;">
+              <span>🔻 ${t.title}</span>
+              <b style="color: #7c3aed;">-${formatVND(t.amount)}</b>
+            </div>
+          `;
+        });
+        document.getElementById('listBabyDeductions').innerHTML = bListHtml;
+      }
+
+      // 5. PHỄU 1: GÓI SINH HOẠT CHUNG
+      const fixedMonthlyBucketIds = new Set((appData.fixedMonthlyItems || []).map(i => i.id));
+      const livingTxs = txs.filter(t => t.type !== 'income' && t.source !== 'baby_savings' && !fixedMonthlyBucketIds.has(t.bucket));
+      const livingSpent = livingTxs.reduce((s, t) => s + (Number(t.amount) || 0), 0);
+      const livingBudget = Number(appData.livingBudget) || 0;
+      const livingRemaining = Math.max(0, livingBudget - livingSpent);
+
       document.getElementById('txtLivingRemaining').innerText = formatVND(livingRemaining);
       document.getElementById('txtLivingSpent').innerText = formatVND(livingSpent);
-      document.getElementById('txtLivingBudgetHeader').innerText = `Hạn mức: ${formatVND(appData.livingBudget)}`;
+      document.getElementById('txtLivingBudgetHeader').innerText = `Hạn mức: ${formatVND(livingBudget)}`;
 
-      const livingPercent = Math.min(100, Math.round((livingSpent / appData.livingBudget) * 100));
+      const livingPercent = livingBudget > 0 ? Math.min(100, Math.round((livingSpent / livingBudget) * 100)) : 0;
       const bar = document.getElementById('barLiving');
       bar.style.width = livingPercent + '%';
-      bar.style.background = livingSpent > appData.livingBudget ? '#e11d48' : '#059669';
+      bar.style.background = livingSpent > livingBudget ? '#e11d48' : '#059669';
 
-      // 5 nhóm con
       let breakdownHtml = '';
       (appData.breakdown || []).forEach(b => {
-        const spent = livingTxs.filter(t => t.cat === b.name || (t.cat && t.cat.includes(b.name.split(' ')[0]))).reduce((s, t) => s + t.amount, 0);
+        const spent = livingTxs.filter(t => t.cat === b.name).reduce((s, t) => s + (Number(t.amount) || 0), 0);
         const p = b.limit > 0 ? Math.min(100, Math.round((spent / b.limit) * 100)) : 0;
         breakdownHtml += `
           <div style="font-size: 12px; background: #f8fafc; padding: 9px 12px; border-radius: 12px; border: 1px solid #f1f5f9;">
@@ -592,41 +870,32 @@
       });
       document.getElementById('listBreakdown').innerHTML = breakdownHtml;
 
-      // Tiết kiệm bé
-      const babySpent = txs.filter(t => t.source === 'baby_savings').reduce((s, t) => s + t.amount, 0);
-      document.getElementById('txtBabySavingsSpent').innerText = `Đã trích: ${formatVND(babySpent)}`;
-      document.getElementById('txtSchoolOneTime').innerText = formatVND(appData.schoolOneTime);
-      document.getElementById('txtInsuranceAmount').innerText = appData.insuranceQuarterly > 0 ? formatVND(appData.insuranceQuarterly) : 'Tùy nhập';
+      // 6. PHỄU 2: CÁC KHOẢN CHI CỐ ĐỊNH THÁNG TỪ THU NHẬP
+      document.getElementById('txtFixedMonthlyTotal').innerText = formatVND(fixedMonthlyPlannedTotal);
+      let fixMListHtml = '';
+      (appData.fixedMonthlyItems || []).forEach(item => {
+        const isPaid = txs.some(t => t.bucket === item.id);
+        fixMListHtml += `
+          <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 14px; padding: 12px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-weight: 800; font-size: 13.5px; color: #0f172a;">${item.name}</span>
+              <span style="font-weight: 900; font-size: 15px; color: #1e40af;">${formatVND(item.amount)}</span>
+            </div>
+            ${item.desc ? `<div style="font-size: 11.5px; color: #64748b; margin-top: 4px;">${item.desc}</div>` : ''}
+            <div style="margin-top: 10px;">
+              ${isPaid 
+                ? `<span class="badge badge-green" style="display: block; text-align: center; padding: 8px; font-size: 12px;">✓ Đã thanh toán tháng này</span>`
+                : `<button class="btn btn-blue" style="width: 100%; font-size: 12px; padding: 9px;" onclick="payDynamicFixedMonthly('${item.id}')">Xác Nhận Đã Đóng (${formatVND(item.amount)})</button>`
+              }
+            </div>
+          </div>
+        `;
+      });
+      document.getElementById('listFixedMonthlyItems').innerHTML = fixMListHtml || '<span style="font-size: 12px; color: #94a3b8;">Chưa cấu hình khoản cố định nào.</span>';
 
-      const hasPaidOneTime = txs.some(t => t.bucket === 'school_onetime');
-      document.getElementById('btnAreaSchoolOneTime').innerHTML = hasPaidOneTime 
-        ? `<span class="badge badge-green" style="display: block; text-align: center; padding: 7px;">✓ Đã đóng</span>`
-        : `<button class="btn btn-purple" style="width: 100%; font-size: 11px; padding: 7px;" onclick="paySchoolOneTime()">Trích Quỹ Bé Đóng</button>`;
-
-      const hasPaidInsurance = txs.some(t => t.bucket === 'insurance');
-      document.getElementById('btnAreaInsurance').innerHTML = hasPaidInsurance
-        ? `<span class="badge badge-green" style="display: block; text-align: center; padding: 7px;">✓ Đã đóng</span>`
-        : `<button class="btn btn-purple" style="width: 100%; font-size: 11px; padding: 7px;" onclick="payInsurance()">Trích Quỹ Bé Đóng</button>`;
-
-      // Học phí thường tháng
-      const schoolMonthlyTotal = getSchoolMonthlyAmount();
-      document.getElementById('txtSchoolMonthly').innerText = formatVND(schoolMonthlyTotal);
-      document.getElementById('txtSchoolDetailDesc').innerText = `Gồm: Học phí (${formatVND(appData.schoolTuition)}) + Ăn ${appData.schoolMealDays} ngày (${formatVND(appData.schoolMealDays * appData.schoolMealRate)}) + Khác (${formatVND(appData.schoolOtherMonthly)}). Trích từ Thu Nhập Tháng.`;
-
-      const hasPaidMonthly = txs.some(t => t.bucket === 'school_monthly');
-      document.getElementById('btnAreaSchoolMonthly').innerHTML = hasPaidMonthly
-        ? `<span class="badge badge-green" style="display: block; text-align: center; padding: 9px; font-size: 13px;">✓ Đã đóng tiền tháng</span>`
-        : `<button class="btn btn-blue" style="width: 100%; font-size: 12.5px; padding: 10px;" onclick="paySchoolMonthly()">Xác Nhận Đã Đóng Học Phí Tháng</button>`;
-
-      // Thẻ tín dụng
-      const credit = txs.filter(t => t.method === 'Thẻ tín dụng').reduce((s, t) => s + t.amount, 0);
+      // 7. THẺ TÍN DỤNG
+      const credit = txs.filter(t => t.method === 'Thẻ tín dụng' && t.type !== 'income').reduce((s, t) => s + (Number(t.amount) || 0), 0);
       document.getElementById('txtCreditSpent').innerText = formatVND(credit);
-
-      // Tiết kiệm tích lũy mới
-      const totalIncome = (appData.incomeSalary || 0) + (appData.incomeHusband || 0) + (appData.incomeRent || 0);
-      const monthlySpent = txs.filter(t => t.source !== 'baby_savings').reduce((s, t) => s + t.amount, 0);
-      const newSav = Math.max(0, totalIncome - (monthlySpent > 0 ? monthlySpent : (appData.livingBudget + schoolMonthlyTotal)));
-      document.getElementById('txtNewSavings').innerText = `+${formatVND(newSav)}`;
 
       renderTransactions();
     }
@@ -635,24 +904,30 @@
       const q = (document.getElementById('inputSearch')?.value || '').toLowerCase();
       const txs = appData.transactions.filter(t => t.monthKey === currentMonth && (!q || t.title.toLowerCase().includes(q)));
       
+      document.getElementById('txtTxCount').innerText = `${txs.length} giao dịch`;
+
       let html = '';
       if (txs.length === 0) {
-        html = '<div style="text-align: center; color: #94a3b8; padding: 20px; font-size: 13px;">Chưa có giao dịch nào trong tháng.</div>';
+        html = '<div style="text-align: center; color: #94a3b8; padding: 24px; font-size: 13px;">Chưa có giao dịch nào trong tháng này.</div>';
       } else {
         txs.forEach(t => {
+          const isInc = t.type === 'income';
+          const isBaby = t.source === 'baby_savings';
           html += `
             <div class="tx-item">
               <div>
                 <div style="font-weight: 700; font-size: 14px;">${t.title}</div>
                 <div style="font-size: 11.5px; color: #64748b; margin-top: 2px;">
-                  <span>${t.cat}</span> • <span>${t.method}</span> • 
-                  <b style="color: ${t.source === 'baby_savings' ? '#7c3aed' : '#059669'};">
-                    ${t.source === 'baby_savings' ? 'Rút quỹ bé' : 'Thu nhập tháng'}
+                  <span>${t.cat || 'Giao dịch'}</span> • <span>${t.method || 'Chuyển khoản'}</span> • 
+                  <b style="color: ${isInc ? '#0284c7' : (isBaby ? '#7c3aed' : '#059669')};">
+                    ${isInc ? 'Khoản thu' : (isBaby ? 'Rút Quỹ Bé' : 'Thu nhập tháng')}
                   </b>
                 </div>
               </div>
               <div style="display: flex; align-items: center; gap: 8px;">
-                <span style="font-weight: 800; color: #e11d48; font-size: 14.5px;">-${formatVND(t.amount)}</span>
+                <span style="font-weight: 800; color: ${isInc ? '#059669' : (isBaby ? '#7c3aed' : '#e11d48')}; font-size: 14.5px;">
+                  ${isInc ? '+' : '-'}${formatVND(t.amount)}
+                </span>
                 <button onclick="deleteTx(${t.id})" style="border: none; background: none; color: #cbd5e1; font-size: 16px; cursor: pointer; padding: 4px;">✕</button>
               </div>
             </div>
@@ -678,59 +953,68 @@
             method: tx.method,
             month_key: tx.monthKey
           }]);
-        } catch (e) {
-          console.error("Lỗi Supabase:", e);
-        }
+        } catch (e) { console.error("Lỗi Supabase:", e); }
       }
     }
 
-    function paySchoolOneTime() {
-      if (confirm(`Rút từ Tiết Kiệm Bé đóng CSVC & Sự kiện (${formatVND(appData.schoolOneTime)})?`)) {
-        recordTransaction({
-          id: Date.now(),
-          title: 'CSVC & Sự kiện đầu năm Edison Reggio',
-          amount: appData.schoolOneTime,
-          source: 'baby_savings',
-          bucket: 'school_onetime',
-          cat: 'Em bé & Con cái',
-          method: 'Chuyển khoản',
-          monthKey: currentMonth
-        });
-      }
+    function topUpBabyFund() {
+      const val = prompt('Nhập số tiền bạn muốn trích từ thặng dư tháng này để nạp bù vào Quỹ Bé (VNĐ):', '2000000');
+      if (!val) return;
+      const amt = parseInt(val.replace(/[^0-9]/g, ''), 10) || 0;
+      if (amt <= 0) return;
+      appData.babyFundExtraTopUp = (appData.babyFundExtraTopUp || 0) + amt;
+      saveLocal();
+      alert(`✅ Đã cộng thêm ${formatVND(amt)} vào Quỹ Bé!`);
     }
 
-    function payInsurance() {
-      let amt = appData.insuranceQuarterly;
-      if (!amt) {
-        const val = prompt('Nhập số tiền bảo hiểm nhân thọ kỳ này (VNĐ):', '6000000');
+    function payDynamicBabyItem(itemId) {
+      const item = (appData.babyFundItems || []).find(i => i.id === itemId);
+      if (!item) return;
+
+      let amt = Number(item.amount) || 0;
+      if (amt <= 0) {
+        const val = prompt(`Nhập số tiền thực tế cho "${item.name}" (VNĐ):`, '0');
         if (!val) return;
         amt = parseInt(val.replace(/[^0-9]/g, ''), 10) || 0;
-        appData.insuranceQuarterly = amt;
+        if (amt <= 0) return;
       }
-      if (confirm(`Rút từ Tiết Kiệm Bé đóng Bảo hiểm nhân thọ (${formatVND(amt)})?`)) {
+
+      if (confirm(`Xác nhận rút từ Quỹ Bé để đóng "${item.name}" (${formatVND(amt)})?`)) {
         recordTransaction({
           id: Date.now(),
-          title: 'Đóng bảo hiểm nhân thọ',
+          title: item.name,
           amount: amt,
+          type: 'expense',
           source: 'baby_savings',
-          bucket: 'insurance',
-          cat: 'Bảo hiểm nhân thọ',
+          bucket: item.id,
+          cat: item.name,
           method: 'Chuyển khoản',
           monthKey: currentMonth
         });
       }
     }
 
-    function paySchoolMonthly() {
-      const total = getSchoolMonthlyAmount();
-      if (confirm(`Đóng học phí thường tháng Edison (${formatVND(total)}) từ Thu Nhập Tháng?`)) {
+    function payDynamicFixedMonthly(itemId) {
+      const item = (appData.fixedMonthlyItems || []).find(i => i.id === itemId);
+      if (!item) return;
+
+      let amt = Number(item.amount) || 0;
+      if (amt <= 0) {
+        const val = prompt(`Nhập số tiền thực tế cho "${item.name}" (VNĐ):`, '0');
+        if (!val) return;
+        amt = parseInt(val.replace(/[^0-9]/g, ''), 10) || 0;
+        if (amt <= 0) return;
+      }
+
+      if (confirm(`Xác nhận thanh toán "${item.name}" (${formatVND(amt)}) từ Thu Nhập Tháng?`)) {
         recordTransaction({
           id: Date.now(),
-          title: 'Học phí thường tháng Edison Reggio',
-          amount: total,
+          title: item.name,
+          amount: amt,
+          type: 'expense',
           source: 'monthly_income',
-          bucket: 'school_monthly',
-          cat: 'Em bé & Con cái',
+          bucket: item.id,
+          cat: item.name,
           method: 'Chuyển khoản',
           monthKey: currentMonth
         });
@@ -738,34 +1022,80 @@
     }
 
     async function deleteTx(id) {
-      if (confirm('Xóa khoản chi này?')) {
+      if (confirm('Xóa giao dịch này?')) {
         appData.transactions = appData.transactions.filter(t => t.id !== id);
         saveLocal();
         if (supaClient) {
-          try {
-            await supaClient.from('transactions').delete().eq('id', id);
-          } catch (e) {}
+          try { await supaClient.from('transactions').delete().eq('id', id); } catch (e) {}
         }
       }
     }
 
-    function openModal() { document.getElementById('modalAdd').style.display = 'flex'; }
+    function setModalType(type) {
+      currentModalType = type;
+      document.getElementById('areaExpenseFields').style.display = type === 'expense' ? 'flex' : 'none';
+      document.getElementById('areaIncomeFields').style.display = type === 'income' ? 'flex' : 'none';
+
+      document.getElementById('btnTypeExpense').className = type === 'expense' ? 'btn btn-emerald' : 'btn btn-outline';
+      document.getElementById('btnTypeExpense').style.border = 'none';
+      document.getElementById('btnTypeIncome').className = type === 'income' ? 'btn btn-sky' : 'btn btn-outline';
+      document.getElementById('btnTypeIncome').style.border = 'none';
+    }
+
+    function openModal(defaultType = 'expense') {
+      let catHtml = '';
+      (appData.breakdown || []).forEach(b => {
+        catHtml += `<option value="${b.name}">${b.name}</option>`;
+      });
+      (appData.babyFundItems || []).forEach(b => {
+        catHtml += `<option value="${b.name}">${b.name}</option>`;
+      });
+      catHtml += `<option value="Chi khác">Chi khác</option>`;
+      document.getElementById('addCat').innerHTML = catHtml;
+
+      let incCatHtml = '';
+      (appData.irregularPresets || []).forEach(item => {
+        incCatHtml += `<option value="${item.name}">${item.name}</option>`;
+      });
+      incCatHtml += `<option value="Khoản thu khác">Khoản thu khác</option>`;
+      document.getElementById('addIncomeCat').innerHTML = incCatHtml;
+
+      setModalType(defaultType);
+      document.getElementById('modalAdd').style.display = 'flex';
+    }
+
     function closeModal() { document.getElementById('modalAdd').style.display = 'none'; }
 
     function saveTx() {
       const title = document.getElementById('addTitle').value.trim();
       const amount = parseInt(document.getElementById('addAmount').value, 10) || 0;
-      if (!title || amount <= 0) return alert('Vui lòng nhập tên và số tiền hợp lệ!');
+      if (!title || amount <= 0) return alert('Vui lòng nhập nội dung và số tiền hợp lệ!');
 
-      recordTransaction({
-        id: Date.now(),
-        title: title,
-        amount: amount,
-        source: document.getElementById('addSource').value,
-        cat: document.getElementById('addCat').value,
-        method: document.getElementById('addMethod').value,
-        monthKey: currentMonth
-      });
+      if (currentModalType === 'income') {
+        recordTransaction({
+          id: Date.now(),
+          title: title,
+          amount: amount,
+          type: 'income',
+          source: 'monthly_income',
+          bucket: 'income_irregular',
+          cat: document.getElementById('addIncomeCat').value,
+          method: 'Chuyển khoản',
+          monthKey: currentMonth
+        });
+      } else {
+        recordTransaction({
+          id: Date.now(),
+          title: title,
+          amount: amount,
+          type: 'expense',
+          source: document.getElementById('addSource').value,
+          bucket: 'general_expense',
+          cat: document.getElementById('addCat').value,
+          method: document.getElementById('addMethod').value,
+          monthKey: currentMonth
+        });
+      }
 
       document.getElementById('addTitle').value = '';
       document.getElementById('addAmount').value = '';
