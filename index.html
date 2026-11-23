@@ -126,11 +126,12 @@
           <div class="flow-net">
             <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px;">
               <div>
-                <span style="font-size: 11px; font-weight: 800; color: #065f46; text-transform: uppercase;">💰 Dư Tiết Kiệm Mới Tháng Này:</span>
+                <span style="font-size: 11px; font-weight: 800; color: #065f46; text-transform: uppercase;">💰 Dư Tiền Tháng Này (Chưa cất STK):</span>
                 <div style="font-size: 24px; font-weight: 900; color: #047857; margin-top: 2px;" id="txtNetSavings">0 ₫</div>
+                <div style="font-size: 11px; color: #059669; margin-top: 2px;" id="txtTransferredToStkNote">Đã chuyển vào STK tháng này: 0 ₫</div>
               </div>
-              <button class="btn btn-emerald" style="font-size: 11px; padding: 8px 10px; white-space: nowrap;" onclick="topUpBabyFund()">
-                + Nạp bù Quỹ Bé
+              <button class="btn btn-sky" style="font-size: 11.5px; padding: 9px 12px; white-space: nowrap; box-shadow: 0 2px 6px rgba(2,132,199,0.25);" onclick="openSavingsModal()">
+                🏦 + Nạp vào STK
               </button>
             </div>
           </div>
@@ -149,7 +150,7 @@
       <!-- 2. HỆ THỐNG SỔ TIẾT KIỆM LIÊN THÔNG -->
       <div class="card" style="background: linear-gradient(180deg, #0f172a 0%, #1e1b4b 100%); color: #fff; border: none;">
         <div style="display: flex; justify-content: space-between; align-items: center;">
-          <span class="badge" style="background: rgba(255,255,255,0.18); color: #e2e8f0;">🏦 Tổng Sổ Tiết Kiệm Hiện Tại</span>
+          <span class="badge" style="background: rgba(255,255,255,0.18); color: #e2e8f0;">🏦 Tổng Sổ Tiết Kiệm (STK) Hiện Tại</span>
           <span class="badge badge-green" id="badgeBaseStatus">Nền Tảng An Toàn</span>
         </div>
 
@@ -167,7 +168,7 @@
           <div style="background: rgba(255,255,255,0.08); padding: 10px 12px; border-radius: 14px; border: 1px solid rgba(56,189,248,0.3);">
             <span style="font-size: 10.5px; color: #7dd3fc; font-weight: 700; display: block;">🔒 NỀN TẢNG KHÓA CỨNG</span>
             <b style="font-size: 16px; color: #fff; display: block; margin-top: 2px;" id="txtBaseLockedAmount">0 ₫</b>
-            <span style="font-size: 10px; color: #94a3b8;">Mức sàn bảo vệ tuyệt đối</span>
+            <span style="font-size: 10px; color: #94a3b8;" id="txtBaseLockedSub">Mức sàn bảo vệ tuyệt đối</span>
           </div>
 
           <div style="background: rgba(192,132,252,0.15); padding: 10px 12px; border-radius: 14px; border: 1px solid rgba(192,132,252,0.4);">
@@ -178,7 +179,7 @@
         </div>
       </div>
 
-      <!-- 3. CÁC KHOẢN RÚT TỪ QUỸ BÉ (BẢO HIỂM, PHÍ ĐẦU NĂM...) - TỰ ĐỘNG RENDER TỪ CẤU HÌNH -->
+      <!-- 3. CÁC KHOẢN RÚT TỪ QUỸ BÉ -->
       <div class="card" style="background: #faf5ff; border: 1.5px solid #e9d5ff;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
           <span class="badge badge-purple">👶 Chi Tiết Các Khoản Trích Quỹ Bé</span>
@@ -213,7 +214,7 @@
         <div id="listBreakdown" style="display: flex; flex-direction: column; gap: 8px;"></div>
       </div>
 
-      <!-- 5. PHỄU 2: CÁC KHOẢN CHI CỐ ĐỊNH HÀNG THÁNG TỪ THU NHẬP (TIỀN TRƯỜNG, V.V.) -->
+      <!-- 5. PHỄU 2: CÁC KHOẢN CHI CỐ ĐỊNH HÀNG THÁNG TỪ THU NHẬP -->
       <div class="card">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
           <span class="badge badge-blue">Phễu 2: Chi Cố Định Tháng Từ Thu Nhập</span>
@@ -240,14 +241,14 @@
       </div>
       <div class="card">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-          <div style="font-weight: 800; font-size: 15px;">Lịch Sử Thu – Chi Tháng Này</div>
+          <div style="font-weight: 800; font-size: 15px;">Lịch Sử Thu – Chi – Nạp STK Tháng Này</div>
           <span style="font-size: 12px; color: #64748b;" id="txtTxCount">0 khoản</span>
         </div>
         <div id="txContainer"></div>
       </div>
     </div>
 
-    <!-- ==================== TAB 3: CÀI ĐẶT TOÀN DIỆN (KHÔNG FIX CỨNG BẤT KỲ CON SỐ NÀO) ==================== -->
+    <!-- ==================== TAB 3: CÀI ĐẶT TOÀN DIỆN ==================== -->
     <div id="tabSettings" style="display: none; flex-direction: column; gap: 14px;">
       
       <div class="card">
@@ -258,7 +259,6 @@
 
         <div style="display: flex; flex-direction: column; gap: 14px;">
           
-          <!-- 1. SỔ TIẾT KIỆM LIÊN THÔNG -->
           <div class="section-title">
             <span>1. Sổ Tiết Kiệm Gốc & Phân Bổ Quỹ Bé</span>
             <span class="badge badge-purple">Liên thông</span>
@@ -274,7 +274,6 @@
             </div>
           </div>
 
-          <!-- 2. DANH SÁCH THU NHẬP CỐ ĐỊNH HÀNG THÁNG (TỰ THÊM/SỬA/XÓA) -->
           <div class="section-title">
             <span>2. Các Nguồn Thu Nhập Cố Định Tháng</span>
             <span class="badge badge-green">Dòng tiền vào</span>
@@ -282,7 +281,6 @@
           <div id="settingsFixedIncomeList" style="display: flex; flex-direction: column; gap: 8px;"></div>
           <button type="button" class="btn btn-outline" style="font-size: 12px; padding: 8px;" onclick="addFixedIncomeItem()">+ Thêm nguồn thu cố định</button>
 
-          <!-- 3. DANH MỤC THU KHÔNG CỐ ĐỊNH (CASHBACK, THANH LÝ, LÃI TK...) -->
           <div class="section-title">
             <span>3. Loại Thu Nhập Phụ / Biến Động</span>
             <span class="badge badge-sky">Tùy biến</span>
@@ -290,7 +288,6 @@
           <div id="settingsIrregularList" style="display: flex; flex-direction: column; gap: 8px;"></div>
           <button type="button" class="btn btn-outline" style="font-size: 12px; padding: 8px;" onclick="addIrregularPreset()">+ Thêm loại thu phụ mới</button>
 
-          <!-- 4. CÁC KHOẢN TRÍCH TỪ QUỸ BÉ (BẢO HIỂM, PHÍ ĐẦU NĂM...) -->
           <div class="section-title">
             <span>4. Các Khoản Trích Từ Quỹ Bé (Bảo Hiểm, CSVC...)</span>
             <span class="badge badge-purple">Trích Quỹ Bé</span>
@@ -298,7 +295,6 @@
           <div id="settingsBabyItemsList" style="display: flex; flex-direction: column; gap: 8px;"></div>
           <button type="button" class="btn btn-outline" style="font-size: 12px; padding: 8px;" onclick="addBabyItem()">+ Thêm khoản trích từ Quỹ Bé</button>
 
-          <!-- 5. CÁC KHOẢN CHI CỐ ĐỊNH THÁNG TỪ THU NHẬP (TRƯỜNG HỌC...) -->
           <div class="section-title">
             <span>5. Chi Cố Định Tháng Từ Thu Nhập (Trường Học...)</span>
             <span class="badge badge-blue">Phễu 2</span>
@@ -306,7 +302,6 @@
           <div id="settingsFixedMonthlyList" style="display: flex; flex-direction: column; gap: 8px;"></div>
           <button type="button" class="btn btn-outline" style="font-size: 12px; padding: 8px;" onclick="addFixedMonthlyItem()">+ Thêm khoản chi cố định tháng</button>
 
-          <!-- 6. GÓI SINH HOẠT CHUNG & NHÓM CON -->
           <div class="section-title">
             <span>6. Gói Sinh Hoạt Chung & Các Nhóm Con</span>
             <span class="badge badge-amber">Phễu 1</span>
@@ -369,7 +364,7 @@
     </button>
   </nav>
 
-  <!-- MODAL THÊM GIAO DỊCH -->
+  <!-- MODAL THÊM GIAO DỊCH THU / CHI -->
   <div class="modal-overlay" id="modalAdd">
     <div class="modal-box">
       <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f1f5f9; padding-bottom: 8px;">
@@ -427,25 +422,55 @@
     </div>
   </div>
 
+  <!-- MODAL NẠP TIỀN DƯ VÀO SỔ TIẾT KIỆM (STK) -->
+  <div class="modal-overlay" id="modalSavings">
+    <div class="modal-box">
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f1f5f9; padding-bottom: 8px;">
+        <div style="font-weight: 800; font-size: 16px; color: #0369a1;">🏦 Nạp Tiền Dư Vào Sổ Tiết Kiệm</div>
+        <button onclick="closeSavingsModal()" style="border: none; background: none; font-size: 20px; color: #94a3b8; cursor: pointer;">✕</button>
+      </div>
+
+      <div style="font-size: 12px; color: #475569; background: #f0f9ff; padding: 10px 12px; border-radius: 12px; border: 1px solid #bae6fd; line-height: 1.4;">
+        Khoản này sẽ <b>cộng thẳng vào Sổ Tiết Kiệm</b> và trừ bớt phần tiền dư đang nằm ở tài khoản tháng này, <b>không tính vào chi tiêu 11M</b>.
+      </div>
+
+      <div>
+        <label style="font-size: 12px; font-weight: 700; color: #475569; margin-bottom: 4px; display: block;">Số tiền muốn cất vào STK (VNĐ):</label>
+        <input type="number" id="savAmount" placeholder="VD: 5000000" />
+      </div>
+
+      <div>
+        <label style="font-size: 12px; font-weight: 700; color: #475569; margin-bottom: 4px; display: block;">Cộng vào phần nào của Sổ Tiết Kiệm?</label>
+        <select id="savTarget">
+          <option value="base_locked">🔒 Cộng vào Nền Tảng Khóa Cứng (Tăng mức bảo vệ gốc)</option>
+          <option value="baby_fund">👶 Cộng vào Quỹ Bé (Bù thêm tiền đóng bảo hiểm / phí)</option>
+        </select>
+      </div>
+
+      <div>
+        <label style="font-size: 12px; font-weight: 700; color: #475569; margin-bottom: 4px; display: block;">Ghi chú (tùy chọn):</label>
+        <input type="text" id="savNote" placeholder="VD: Cất tiền dư lương + cashback tháng 11" />
+      </div>
+
+      <button class="btn btn-sky" style="padding: 12px; font-size: 14px; margin-top: 4px;" onclick="saveSavingsDeposit()">Xác Nhận Nạp Vào STK</button>
+    </div>
+  </div>
+
   <script>
-    const LOCAL_KEY = 'GIA_DINH_DYNAMIC_CFG_V5';
+    const LOCAL_KEY = 'GIA_DINH_DYNAMIC_CFG_V6';
     let supaClient = null;
     let currentModalType = 'expense';
 
-    // DỮ LIỆU KHỞI TẠO ĐỘNG (HOÀN TOÀN CÓ THỂ THÊM/SỬA/XÓA MỌI THỨ)
     let defaultData = {
       totalSavingsInitial: 320000000,
       babyFundAllocated: 25000000,
-      babyFundExtraTopUp: 0,
 
-      // 1. Mảng thu nhập cố định (Tự do thêm/sửa/xóa)
       fixedIncomes: [
         { id: 'inc1', name: 'Lương của tôi', amount: 12500000 },
         { id: 'inc2', name: 'Chồng chuyển quản lý', amount: 10000000 },
         { id: 'inc3', name: 'Cho thuê phòng', amount: 2500000 }
       ],
 
-      // 2. Danh mục thu nhập phụ / không cố định
       irregularPresets: [
         { id: 'irr1', name: 'Cashback thẻ tín dụng' },
         { id: 'irr2', name: 'Thanh lý đồ bán được' },
@@ -453,18 +478,15 @@
         { id: 'irr4', name: 'Thưởng / Tiền tặng bé' }
       ],
 
-      // 3. Mảng các khoản trích từ Quỹ Bé (Tự do thêm/sửa/xóa)
       babyFundItems: [
         { id: 'baby_item_1', name: 'CSVC & Sự kiện đầu năm Edison', amount: 1520000 },
         { id: 'baby_item_2', name: 'Bảo hiểm nhân thọ (Định kỳ)', amount: 0 }
       ],
 
-      // 4. Mảng các khoản chi cố định hàng tháng từ Thu nhập (Tự do thêm/sửa/xóa)
       fixedMonthlyItems: [
         { id: 'fix_m_1', name: 'Học phí & Tiền ăn Edison Reggio', amount: 4650000, desc: 'Học phí 3.15M + Ăn 26 ngày (1.3M) + Học liệu/ĐH (200k)' }
       ],
 
-      // 5. Gói sinh hoạt & các nhóm con (Tự do thêm/sửa/xóa)
       livingBudget: 11000000,
       breakdown: [
         { id: 'b1', name: 'Ăn uống & Đi chợ', limit: 4500000 },
@@ -503,7 +525,7 @@
             id: Number(t.id),
             title: t.title,
             amount: Number(t.amount),
-            type: t.bucket === 'income_irregular' ? 'income' : 'expense',
+            type: t.bucket === 'income_irregular' ? 'income' : (t.bucket === 'savings_deposit' ? 'savings_deposit' : 'expense'),
             source: t.source,
             bucket: t.bucket,
             cat: t.cat,
@@ -531,7 +553,7 @@
         if (saved) {
           appData = Object.assign({}, defaultData, JSON.parse(saved));
         } else {
-          const old = localStorage.getItem('GIA_DINH_LINKED_SAVINGS_V4');
+          const old = localStorage.getItem('GIA_DINH_DYNAMIC_CFG_V5');
           if (old) {
             const p = JSON.parse(old);
             if (p.transactions) appData.transactions = p.transactions;
@@ -568,13 +590,11 @@
       if (tab === 'settings') renderSettingsForm();
     }
 
-    // ==================== RENDER FORM CÀI ĐẶT ĐỘNG ====================
     function renderSettingsForm() {
       document.getElementById('cfgTotalSavingsInitial').value = appData.totalSavingsInitial || 0;
       document.getElementById('cfgBabyFundAllocated').value = appData.babyFundAllocated || 0;
       document.getElementById('cfgLiving').value = appData.livingBudget || 0;
 
-      // 1. Thu nhập cố định
       let fIncHtml = '';
       (appData.fixedIncomes || []).forEach((item, idx) => {
         fIncHtml += `
@@ -587,7 +607,6 @@
       });
       document.getElementById('settingsFixedIncomeList').innerHTML = fIncHtml;
 
-      // 2. Loại thu không cố định
       let irrHtml = '';
       (appData.irregularPresets || []).forEach((item, idx) => {
         irrHtml += `
@@ -599,7 +618,6 @@
       });
       document.getElementById('settingsIrregularList').innerHTML = irrHtml;
 
-      // 3. Các khoản trích Quỹ Bé
       let babyHtml = '';
       (appData.babyFundItems || []).forEach((item, idx) => {
         babyHtml += `
@@ -612,7 +630,6 @@
       });
       document.getElementById('settingsBabyItemsList').innerHTML = babyHtml;
 
-      // 4. Các khoản chi cố định hàng tháng từ Thu nhập
       let fixMHtml = '';
       (appData.fixedMonthlyItems || []).forEach((item, idx) => {
         fixMHtml += `
@@ -628,7 +645,6 @@
       });
       document.getElementById('settingsFixedMonthlyList').innerHTML = fixMHtml;
 
-      // 5. Nhóm con gói sinh hoạt
       let bHtml = '';
       (appData.breakdown || []).forEach((b, idx) => {
         bHtml += `
@@ -645,7 +661,6 @@
       document.getElementById('cfgSupaKey').value = localStorage.getItem('SUPABASE_KEY') || '';
     }
 
-    // Các hàm thêm / xóa dòng cấu hình
     function syncCurrentInputsBeforeMutate() {
       appData.totalSavingsInitial = Number(document.getElementById('cfgTotalSavingsInitial').value) || 0;
       appData.babyFundAllocated = Number(document.getElementById('cfgBabyFundAllocated').value) || 0;
@@ -721,11 +736,10 @@
       switchTab('overview');
     }
 
-    // ==================== RENDER TRANG CHÍNH ====================
     function render() {
       const txs = appData.transactions.filter(t => t.monthKey === currentMonth);
 
-      // 1. DÒNG TIỀN VÀO (IN = Tổng thu cố định + Tổng thu không cố định thực nhận)
+      // 1. DÒNG TIỀN VÀO (IN)
       const fixedIncomeTotal = (appData.fixedIncomes || []).reduce((s, item) => s + (Number(item.amount) || 0), 0);
       const irregularTxs = txs.filter(t => t.type === 'income');
       const irregularTotal = irregularTxs.reduce((s, t) => s + (Number(t.amount) || 0), 0);
@@ -753,56 +767,75 @@
         document.getElementById('listIrregularIncome').innerHTML = irrListHtml;
       }
 
-      // 2. DÒNG TIỀN RA TỪ THU NHẬP THÁNG (OUT)
-      const monthlyOutTxs = txs.filter(t => t.type !== 'income' && t.source !== 'baby_savings');
+      // 2. DÒNG TIỀN RA TỪ THU NHẬP THÁNG (OUT - Chỉ tính chi tiêu, KHÔNG tính nạp STK)
+      const monthlyOutTxs = txs.filter(t => t.type === 'expense' && t.source !== 'baby_savings');
       const totalMonthlyOut = monthlyOutTxs.reduce((s, t) => s + (Number(t.amount) || 0), 0);
       document.getElementById('txtFlowOut').innerText = formatVND(totalMonthlyOut);
 
-      // 3. THẶNG DƯ TIẾT KIỆM MỚI (NET)
+      // 3. CÁC KHOẢN ĐÃ NẠP VÀO STK TRONG THÁNG NÀY
+      const monthSavDeposits = txs.filter(t => t.type === 'savings_deposit');
+      const monthSavDepositedTotal = monthSavDeposits.reduce((s, t) => s + (Number(t.amount) || 0), 0);
+
+      // Thặng dư còn nằm ở tài khoản tháng = [Tổng Vào] - [Tổng Chi thực tế/kế hoạch] - [Đã nạp vào STK]
       const fixedMonthlyPlannedTotal = (appData.fixedMonthlyItems || []).reduce((s, item) => s + (Number(item.amount) || 0), 0);
       const plannedOut = (Number(appData.livingBudget) || 0) + fixedMonthlyPlannedTotal;
       const actualOrPlannedOut = totalMonthlyOut > 0 ? totalMonthlyOut : plannedOut;
-      const netSavings = Math.max(0, totalIncomeIn - actualOrPlannedOut);
-      document.getElementById('txtNetSavings').innerText = `+${formatVND(netSavings)}`;
+      const netRemainingCash = Math.max(0, totalIncomeIn - actualOrPlannedOut - monthSavDepositedTotal);
 
-      // 4. SỔ TIẾT KIỆM LIÊN THÔNG
+      document.getElementById('txtNetSavings').innerText = formatVND(netRemainingCash);
+      document.getElementById('txtTransferredToStkNote').innerText = `Đã chuyển vào STK tháng này: +${formatVND(monthSavDepositedTotal)}`;
+
+      // 4. HỆ THỐNG SỔ TIẾT KIỆM LIÊN THÔNG (Tính cộng dồn toàn bộ lịch sử nạp STK & rút Quỹ Bé)
       const totalInitial = Number(appData.totalSavingsInitial) || 0;
-      const babyAllocated = (Number(appData.babyFundAllocated) || 0) + (Number(appData.babyFundExtraTopUp) || 0);
-      const baseLocked = Math.max(0, totalInitial - (Number(appData.babyFundAllocated) || 0));
+      const babyInitialAlloc = Number(appData.babyFundAllocated) || 0;
+      const baseInitialLocked = Math.max(0, totalInitial - babyInitialAlloc);
 
-      const allBabyTxs = appData.transactions.filter(t => t.type !== 'income' && t.source === 'baby_savings');
+      // Cộng dồn nạp thêm từ các giao dịch savings_deposit
+      const allDepositBase = appData.transactions
+        .filter(t => t.type === 'savings_deposit' && t.source === 'base_locked')
+        .reduce((s, t) => s + (Number(t.amount) || 0), 0);
+
+      const allDepositBaby = appData.transactions
+        .filter(t => t.type === 'savings_deposit' && t.source === 'baby_fund')
+        .reduce((s, t) => s + (Number(t.amount) || 0), 0);
+
+      // Cộng dồn rút từ Quỹ Bé
+      const allBabyTxs = appData.transactions.filter(t => t.type === 'expense' && t.source === 'baby_savings');
       const totalBabyDeductedAllTime = allBabyTxs.reduce((s, t) => s + (Number(t.amount) || 0), 0);
 
-      const monthBabyTxs = txs.filter(t => t.type !== 'income' && t.source === 'baby_savings');
+      const monthBabyTxs = txs.filter(t => t.type === 'expense' && t.source === 'baby_savings');
       const monthBabyDeducted = monthBabyTxs.reduce((s, t) => s + (Number(t.amount) || 0), 0);
 
-      const babySliceRemaining = Math.max(0, babyAllocated - totalBabyDeductedAllTime);
-      const totalSavingsCurrent = Math.max(0, (totalInitial + (Number(appData.babyFundExtraTopUp) || 0)) - totalBabyDeductedAllTime);
+      const currentBaseLocked = baseInitialLocked + allDepositBase;
+      const babyTotalPool = babyInitialAlloc + allDepositBaby;
+      const babySliceRemaining = Math.max(0, babyTotalPool - totalBabyDeductedAllTime);
+      const totalSavingsCurrent = currentBaseLocked + babySliceRemaining;
 
       document.getElementById('txtTotalSavingsCurrent').innerText = formatVND(totalSavingsCurrent);
       document.getElementById('txtTotalSavingsInitial').innerText = formatVND(totalInitial);
-      document.getElementById('txtBaseLockedAmount').innerText = formatVND(baseLocked);
+      document.getElementById('txtBaseLockedAmount').innerText = formatVND(currentBaseLocked);
+      document.getElementById('txtBaseLockedSub').innerText = allDepositBase > 0 ? `Gốc ${formatVND(baseInitialLocked)} + Nạp thêm ${formatVND(allDepositBase)}` : 'Mức sàn bảo vệ tuyệt đối';
       document.getElementById('txtBabySliceRemaining').innerText = formatVND(babySliceRemaining);
-      document.getElementById('txtBabySliceSub').innerText = `Gốc ${formatVND(babyAllocated)} • Đã rút ${formatVND(totalBabyDeductedAllTime)}`;
+      document.getElementById('txtBabySliceSub').innerText = `Tổng quỹ ${formatVND(babyTotalPool)} • Đã rút ${formatVND(totalBabyDeductedAllTime)}`;
       document.getElementById('txtBabyDeductedTag').innerText = `Đã trừ tháng này: -${formatVND(monthBabyDeducted)}`;
 
       if (totalSavingsCurrent > 0) {
-        const basePct = Math.min(100, Math.round((baseLocked / totalSavingsCurrent) * 100));
+        const basePct = Math.min(100, Math.round((currentBaseLocked / totalSavingsCurrent) * 100));
         const babyPct = Math.max(0, 100 - basePct);
         document.getElementById('barBaseLocked').style.width = basePct + '%';
         document.getElementById('barBabySlice').style.width = babyPct + '%';
       }
 
       const badgeBase = document.getElementById('badgeBaseStatus');
-      if (totalSavingsCurrent >= baseLocked) {
+      if (totalSavingsCurrent >= baseInitialLocked) {
         badgeBase.className = 'badge badge-green';
-        badgeBase.innerText = `Nền ${formatVND(baseLocked)} An Toàn`;
+        badgeBase.innerText = `Nền ${formatVND(currentBaseLocked)} An Toàn`;
       } else {
         badgeBase.className = 'badge badge-rose';
         badgeBase.innerText = '⚠️ Cảnh báo: Chạm mức nền!';
       }
 
-      // Render các khoản trích Quỹ Bé (Động 100% theo cài đặt)
+      // Render các khoản trích Quỹ Bé
       let babyGridHtml = '';
       (appData.babyFundItems || []).forEach(item => {
         const isPaid = txs.some(t => t.bucket === item.id);
@@ -838,7 +871,7 @@
 
       // 5. PHỄU 1: GÓI SINH HOẠT CHUNG
       const fixedMonthlyBucketIds = new Set((appData.fixedMonthlyItems || []).map(i => i.id));
-      const livingTxs = txs.filter(t => t.type !== 'income' && t.source !== 'baby_savings' && !fixedMonthlyBucketIds.has(t.bucket));
+      const livingTxs = txs.filter(t => t.type === 'expense' && t.source !== 'baby_savings' && !fixedMonthlyBucketIds.has(t.bucket));
       const livingSpent = livingTxs.reduce((s, t) => s + (Number(t.amount) || 0), 0);
       const livingBudget = Number(appData.livingBudget) || 0;
       const livingRemaining = Math.max(0, livingBudget - livingSpent);
@@ -870,7 +903,7 @@
       });
       document.getElementById('listBreakdown').innerHTML = breakdownHtml;
 
-      // 6. PHỄU 2: CÁC KHOẢN CHI CỐ ĐỊNH THÁNG TỪ THU NHẬP
+      // 6. PHỄU 2: CHI CỐ ĐỊNH THÁNG TỪ THU NHẬP
       document.getElementById('txtFixedMonthlyTotal').innerText = formatVND(fixedMonthlyPlannedTotal);
       let fixMListHtml = '';
       (appData.fixedMonthlyItems || []).forEach(item => {
@@ -894,7 +927,7 @@
       document.getElementById('listFixedMonthlyItems').innerHTML = fixMListHtml || '<span style="font-size: 12px; color: #94a3b8;">Chưa cấu hình khoản cố định nào.</span>';
 
       // 7. THẺ TÍN DỤNG
-      const credit = txs.filter(t => t.method === 'Thẻ tín dụng' && t.type !== 'income').reduce((s, t) => s + (Number(t.amount) || 0), 0);
+      const credit = txs.filter(t => t.method === 'Thẻ tín dụng' && t.type === 'expense').reduce((s, t) => s + (Number(t.amount) || 0), 0);
       document.getElementById('txtCreditSpent').innerText = formatVND(credit);
 
       renderTransactions();
@@ -912,21 +945,43 @@
       } else {
         txs.forEach(t => {
           const isInc = t.type === 'income';
+          const isSav = t.type === 'savings_deposit';
           const isBaby = t.source === 'baby_savings';
+
+          let tagLabel = 'Thu nhập tháng';
+          let tagColor = '#059669';
+          let amountPrefix = '-';
+          let amountColor = '#e11d48';
+
+          if (isInc) {
+            tagLabel = 'Khoản thu';
+            tagColor = '#0284c7';
+            amountPrefix = '+';
+            amountColor = '#059669';
+          } else if (isSav) {
+            tagLabel = t.source === 'baby_fund' ? 'Nạp STK (Quỹ Bé)' : 'Nạp STK (Nền tảng)';
+            tagColor = '#0284c7';
+            amountPrefix = '🏦 +';
+            amountColor = '#0284c7';
+          } else if (isBaby) {
+            tagLabel = 'Rút Quỹ Bé';
+            tagColor = '#7c3aed';
+            amountPrefix = '-';
+            amountColor = '#7c3aed';
+          }
+
           html += `
             <div class="tx-item">
               <div>
                 <div style="font-weight: 700; font-size: 14px;">${t.title}</div>
                 <div style="font-size: 11.5px; color: #64748b; margin-top: 2px;">
                   <span>${t.cat || 'Giao dịch'}</span> • <span>${t.method || 'Chuyển khoản'}</span> • 
-                  <b style="color: ${isInc ? '#0284c7' : (isBaby ? '#7c3aed' : '#059669')};">
-                    ${isInc ? 'Khoản thu' : (isBaby ? 'Rút Quỹ Bé' : 'Thu nhập tháng')}
-                  </b>
+                  <b style="color: ${tagColor};">${tagLabel}</b>
                 </div>
               </div>
               <div style="display: flex; align-items: center; gap: 8px;">
-                <span style="font-weight: 800; color: ${isInc ? '#059669' : (isBaby ? '#7c3aed' : '#e11d48')}; font-size: 14.5px;">
-                  ${isInc ? '+' : '-'}${formatVND(t.amount)}
+                <span style="font-weight: 800; color: ${amountColor}; font-size: 14.5px;">
+                  ${amountPrefix}${formatVND(t.amount)}
                 </span>
                 <button onclick="deleteTx(${t.id})" style="border: none; background: none; color: #cbd5e1; font-size: 16px; cursor: pointer; padding: 4px;">✕</button>
               </div>
@@ -957,14 +1012,39 @@
       }
     }
 
-    function topUpBabyFund() {
-      const val = prompt('Nhập số tiền bạn muốn trích từ thặng dư tháng này để nạp bù vào Quỹ Bé (VNĐ):', '2000000');
-      if (!val) return;
-      const amt = parseInt(val.replace(/[^0-9]/g, ''), 10) || 0;
-      if (amt <= 0) return;
-      appData.babyFundExtraTopUp = (appData.babyFundExtraTopUp || 0) + amt;
-      saveLocal();
-      alert(`✅ Đã cộng thêm ${formatVND(amt)} vào Quỹ Bé!`);
+    // Modal Nạp Tiền Dư Vào STK
+    function openSavingsModal() {
+      document.getElementById('savAmount').value = '';
+      document.getElementById('savNote').value = '';
+      document.getElementById('modalSavings').style.display = 'flex';
+    }
+
+    function closeSavingsModal() {
+      document.getElementById('modalSavings').style.display = 'none';
+    }
+
+    function saveSavingsDeposit() {
+      const amt = parseInt(document.getElementById('savAmount').value, 10) || 0;
+      if (amt <= 0) return alert('Vui lòng nhập số tiền hợp lệ để nạp vào STK!');
+
+      const target = document.getElementById('savTarget').value;
+      const note = document.getElementById('savNote').value.trim();
+      const targetName = target === 'baby_fund' ? 'Quỹ Bé' : 'Nền tảng khóa cứng';
+
+      recordTransaction({
+        id: Date.now(),
+        title: note || `Nạp tiền dư vào STK (${targetName})`,
+        amount: amt,
+        type: 'savings_deposit',
+        source: target,
+        bucket: 'savings_deposit',
+        cat: 'Tích lũy STK',
+        method: 'Chuyển khoản',
+        monthKey: currentMonth
+      });
+
+      closeSavingsModal();
+      alert(`✅ Đã nạp ${formatVND(amt)} vào Sổ Tiết Kiệm (${targetName})!`);
     }
 
     function payDynamicBabyItem(itemId) {
